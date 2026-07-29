@@ -181,8 +181,8 @@ a { color: inherit; text-decoration: none; }
 /* ---------- Hero (home) ---------- */
 .hero {
   position: relative;
-  background: #fff;
-  color: var(--dark);
+  background: #000;
+  color: #fff;
   overflow: hidden;
   display: flex;
   align-items: center;
@@ -207,7 +207,7 @@ a { color: inherit; text-decoration: none; }
 
 .starfield .star {
   position: absolute;
-  background: #000;
+  background: #fff;
   border-radius: 50%;
 }
 
@@ -225,10 +225,10 @@ a { color: inherit; text-decoration: none; }
   position: absolute;
   width: 2px;
   height: 2px;
-  background: #000;
+  background: #fff;
   border-radius: 50%;
   opacity: 0;
-  box-shadow: 0 0 6px 1px rgba(0,0,0,0.8);
+  box-shadow: 0 0 6px 1px rgba(255,255,255,0.8);
   animation-name: shooting-star;
   animation-timing-function: cubic-bezier(0.2, 0.6, 0.2, 1);
   animation-iteration-count: infinite;
@@ -243,7 +243,7 @@ a { color: inherit; text-decoration: none; }
   height: 1px;
   transform-origin: right center;
   transform: translate(-100%, -50%) rotate(32deg);
-  background: linear-gradient(90deg, rgba(0,0,0,0.9), rgba(0,0,0,0));
+  background: linear-gradient(90deg, rgba(255,255,255,0.9), rgba(255,255,255,0));
 }
 
 @keyframes shooting-star {
