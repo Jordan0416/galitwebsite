@@ -61,7 +61,7 @@ a { color: inherit; text-decoration: none; }
 .site-header::before {
   content: "";
   position: absolute;
-  inset: -60px;
+  inset: -280px;
   background-image: url('assets/images/galitmoon.png');
   background-repeat: no-repeat;
   background-position: center;
@@ -178,15 +178,15 @@ a { color: inherit; text-decoration: none; }
 /* ---------- Hero (home) ---------- */
 .hero {
   position: relative;
-  background: linear-gradient(160deg, #0c1220 0%, #1b2740 55%, #2a3452 100%);
-  color: #fff;
+  background: #fff;
+  color: var(--dark);
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 55px;
   padding: 65px 60px 0 60px;
-  border: 11px solid #fff;
+  border: 11px solid var(--dark);
 }
 
 .starfield {
@@ -203,7 +203,7 @@ a { color: inherit; text-decoration: none; }
 
 .starfield .star {
   position: absolute;
-  background: #fff;
+  background: #000;
   border-radius: 50%;
 }
 
@@ -221,10 +221,10 @@ a { color: inherit; text-decoration: none; }
   position: absolute;
   width: 2px;
   height: 2px;
-  background: #fff;
+  background: #000;
   border-radius: 50%;
   opacity: 0;
-  box-shadow: 0 0 6px 1px rgba(255,255,255,0.8);
+  box-shadow: 0 0 6px 1px rgba(0,0,0,0.8);
   animation-name: shooting-star;
   animation-timing-function: cubic-bezier(0.2, 0.6, 0.2, 1);
   animation-iteration-count: infinite;
@@ -239,7 +239,7 @@ a { color: inherit; text-decoration: none; }
   height: 1px;
   transform-origin: right center;
   transform: translate(-100%, -50%) rotate(32deg);
-  background: linear-gradient(90deg, rgba(255,255,255,0.9), rgba(255,255,255,0));
+  background: linear-gradient(90deg, rgba(0,0,0,0.9), rgba(0,0,0,0));
 }
 
 @keyframes shooting-star {
