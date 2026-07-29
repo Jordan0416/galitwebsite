@@ -2,7 +2,7 @@
   var field = document.getElementById('starfield');
   if (!field) return;
 
-  var COUNT = 140;
+  var COUNT = 260;
   for (var i = 0; i < COUNT; i++) {
     var star = document.createElement('div');
     star.className = 'star';
@@ -15,15 +15,15 @@
     star.style.opacity = (Math.random() * 0.5 + 0.35).toFixed(2);
 
     var anims = [];
-    if (Math.random() < 0.45) {
-      var twinkleDur = (2 + Math.random() * 2.5).toFixed(2);
+    if (Math.random() < 0.7) {
+      var twinkleDur = (1.4 + Math.random() * 2).toFixed(2);
       var twinkleDelay = (Math.random() * 3.2).toFixed(2);
       anims.push('star-twinkle ' + twinkleDur + 's ease-in-out ' + twinkleDelay + 's infinite');
     }
-    if (Math.random() < 0.5) {
-      star.style.setProperty('--drift-x', (Math.random() * 18 - 9).toFixed(1) + 'px');
-      star.style.setProperty('--drift-y', (Math.random() * 14 - 7).toFixed(1) + 'px');
-      var driftDur = (7 + Math.random() * 6).toFixed(2);
+    if (Math.random() < 0.75) {
+      star.style.setProperty('--drift-x', (Math.random() * 30 - 15).toFixed(1) + 'px');
+      star.style.setProperty('--drift-y', (Math.random() * 22 - 11).toFixed(1) + 'px');
+      var driftDur = (5 + Math.random() * 5).toFixed(2);
       var driftDelay = (Math.random() * 4).toFixed(2);
       anims.push('star-drift ' + driftDur + 's ease-in-out ' + driftDelay + 's infinite alternate');
     }
@@ -35,7 +35,7 @@
   }
 
   // A handful of shooting stars that streak across on their own random cadence.
-  var SHOOTERS = 5;
+  var SHOOTERS = 9;
   for (var j = 0; j < SHOOTERS; j++) {
     var shooter = document.createElement('div');
     shooter.className = 'shooting-star';
