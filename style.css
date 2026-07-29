@@ -284,7 +284,11 @@ a { color: inherit; text-decoration: none; }
 }
 
 .hero .moon {
-  display: none;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 120px;
+  max-width: 14.5vw;
 }
 
 .hero-photo {
