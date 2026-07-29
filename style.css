@@ -801,6 +801,18 @@ a { color: inherit; text-decoration: none; }
   transition: background 0.2s ease;
 }
 
+.newsletter button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.newsletter-status {
+  margin: 20px 0 0;
+  font-size: 14px;
+  color: var(--gold-dark);
+  min-height: 1.2em;
+}
+
 .newsletter button:hover {
   background: var(--gold-dark);
 }

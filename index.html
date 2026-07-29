@@ -117,11 +117,12 @@
   <section class="newsletter">
     <div class="newsletter-inner">
       <p class="lead">Sign up for exclusive updates and free wisdom delivered directly to your inbox.</p>
-      <form>
-        <label>Name: <input type="text" name="name"></label>
-        <label>Email: <input type="email" name="email"></label>
+      <form id="newsletterForm">
+        <label>Name: <input type="text" name="name" required></label>
+        <label>Email: <input type="email" name="email" required></label>
         <button type="submit" class="display">Join the conversation</button>
       </form>
+      <p class="newsletter-status" id="newsletterStatus" aria-live="polite"></p>
     </div>
   </section>
 
@@ -146,5 +147,6 @@
   <script src="assets/js/slideshow.js"></script>
   <script src="assets/js/about-photo.js"></script>
   <script src="assets/js/starfield.js"></script>
+  <script src="assets/js/newsletter.js"></script>
 </body>
 </html>
