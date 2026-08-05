@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Anton&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=EB+Garamond:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=EB+Garamond:ital@0;1&family=Heebo:wght@400;500;700&family=Frank+Ruhl+Libre:wght@500;700&display=swap');
 
 :root {
   --gold: #9b7b5d;
@@ -1615,4 +1615,228 @@ body:not(:has(.hero)) .site-header::before {
   font-size: 14px;
   color: var(--gold-dark);
   min-height: 1.2em;
+}
+
+/* ---------- Language toggle ---------- */
+.lang-toggle {
+  border: 1px solid var(--gold);
+  background: none;
+  color: var(--gold-dark);
+  font-family: 'Heebo', 'EB Garamond', sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  padding: 7px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.lang-toggle:hover {
+  background: var(--gold);
+  color: #fff;
+}
+
+/* ---------- Hebrew typography ---------- */
+html[lang="he"] body {
+  font-family: 'Frank Ruhl Libre', 'EB Garamond', serif;
+}
+
+html[lang="he"] .display,
+html[lang="he"] .main-nav a,
+html[lang="he"] .logo-tagline,
+html[lang="he"] button,
+html[lang="he"] .event-date,
+html[lang="he"] .cta-button {
+  font-family: 'Heebo', sans-serif;
+  letter-spacing: 0;
+}
+
+html[lang="he"] .display {
+  font-weight: 700;
+}
+
+html[lang="he"] .logo,
+html[lang="he"] .gold-heading,
+html[lang="he"] .newsletter-title,
+html[lang="he"] .topic-item-title,
+html[lang="he"] .card .card-text h3,
+html[lang="he"] .event-card-body h2,
+html[lang="he"] .popup-modal h3,
+html[lang="he"] .newsletter p.lead {
+  font-family: 'Frank Ruhl Libre', serif;
+  letter-spacing: 0;
+}
+
+html[dir="rtl"] .topic-item summary::after {
+  right: auto;
+  left: 0;
+}
+
+html[dir="rtl"] .topic-item summary {
+  padding: 22px 0 22px 52px;
+}
+
+@media (max-width: 640px) {
+  html[dir="rtl"] .topic-item summary {
+    padding: 18px 0 18px 44px;
+  }
+}
+
+/* ---------- Accessibility widget ---------- */
+.a11y-widget {
+  position: fixed;
+  bottom: 22px;
+  right: 22px;
+  z-index: 3000;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+html[dir="rtl"] .a11y-widget {
+  right: auto;
+  left: 22px;
+  align-items: flex-start;
+}
+
+.a11y-button {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none;
+  background: var(--gold);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.28);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.a11y-button:hover {
+  background: var(--gold-dark);
+  transform: scale(1.06);
+}
+
+.a11y-button svg {
+  width: 28px;
+  height: 28px;
+}
+
+.a11y-panel {
+  display: none;
+  background: #fff;
+  color: var(--dark);
+  border: 1px solid #e5ddd3;
+  border-radius: 8px;
+  box-shadow: 0 18px 48px rgba(0,0,0,0.22);
+  padding: 18px 20px;
+  min-width: 230px;
+}
+
+.a11y-widget.open .a11y-panel {
+  display: block;
+}
+
+.a11y-title {
+  font-family: 'Playfair Display', 'Frank Ruhl Libre', serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--gold-dark);
+  margin: 0 0 12px;
+}
+
+.a11y-panel label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15.5px;
+  padding: 6px 0;
+  cursor: pointer;
+}
+
+.a11y-panel input[type="checkbox"] {
+  width: 17px;
+  height: 17px;
+  accent-color: var(--gold);
+  cursor: pointer;
+}
+
+.a11y-reset {
+  margin-top: 12px;
+  border: 1px solid #ddd;
+  background: none;
+  border-radius: 3px;
+  padding: 7px 16px;
+  font-size: 13.5px;
+  color: #777;
+  cursor: pointer;
+}
+
+.a11y-reset:hover {
+  border-color: var(--gold);
+  color: var(--gold-dark);
+}
+
+/* ---------- Accessibility modes ---------- */
+html.acc-large body {
+  zoom: 1.18;
+}
+
+html.acc-contrast body,
+html.acc-contrast .quote,
+html.acc-contrast .events-intro,
+html.acc-contrast .event-location,
+html.acc-contrast .events-note,
+html.acc-contrast .topic-item-subtitle,
+html.acc-contrast .popup-modal > p {
+  color: #000;
+}
+
+html.acc-contrast .gold-heading,
+html.acc-contrast .topic-item-title,
+html.acc-contrast .topic-signup-note,
+html.acc-contrast .event-date,
+html.acc-contrast .newsletter-title {
+  color: #5a4227;
+}
+
+html.acc-contrast .newsletter p.lead,
+html.acc-contrast .newsletter-status,
+html.acc-contrast .topics-banner p,
+html.acc-contrast .video-link {
+  color: #f5e9d5;
+}
+
+html.acc-contrast .newsletter button,
+html.acc-contrast .topic-signup button,
+html.acc-contrast .cta-button,
+html.acc-contrast .popup-modal button[type="submit"] {
+  background: #5a4227;
+}
+
+html.acc-dyslexia body,
+html.acc-dyslexia body * {
+  font-family: Verdana, Arial, sans-serif !important;
+  letter-spacing: 0.04em !important;
+  word-spacing: 0.12em !important;
+}
+
+html.acc-dyslexia body p,
+html.acc-dyslexia .topic-item-body p,
+html.acc-dyslexia .about-intro p {
+  line-height: 1.95 !important;
+}
+
+html.acc-motion *,
+html.acc-motion *::before,
+html.acc-motion *::after {
+  animation: none !important;
+  transition: none !important;
+}
+
+html.acc-underline a {
+  text-decoration: underline !important;
 }

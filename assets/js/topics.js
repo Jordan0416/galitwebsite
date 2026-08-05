@@ -46,13 +46,17 @@
     return rows;
   }
 
+  function t(key, fallback) {
+    return (window.SITE_I18N && window.SITE_I18N.t && window.SITE_I18N.t[key]) || fallback;
+  }
+
   function buildSignup(topicTitle) {
     var form = document.createElement('form');
     form.className = 'topic-signup';
 
     var note = document.createElement('p');
     note.className = 'topic-signup-note';
-    note.textContent = 'Interested in this topic? Join the newsletter for updates:';
+    note.textContent = t('signupNote', 'Interested in this topic? Join the newsletter for updates:');
     form.appendChild(note);
 
     var row = document.createElement('div');
@@ -61,14 +65,14 @@
     var name = document.createElement('input');
     name.type = 'text';
     name.name = 'name';
-    name.placeholder = 'Your name';
+    name.placeholder = t('yourName', 'Your name');
     name.required = true;
     row.appendChild(name);
 
     var email = document.createElement('input');
     email.type = 'email';
     email.name = 'email';
-    email.placeholder = 'Your email';
+    email.placeholder = t('yourEmail', 'Your email');
     email.required = true;
     row.appendChild(email);
 
@@ -81,7 +85,7 @@
     var btn = document.createElement('button');
     btn.type = 'submit';
     btn.className = 'display';
-    btn.textContent = 'Sign up';
+    btn.textContent = t('signUp', 'Sign up');
     row.appendChild(btn);
     form.appendChild(row);
 
@@ -93,14 +97,14 @@
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       btn.disabled = true;
-      status.textContent = 'Submitting...';
+      status.textContent = t('submitting', 'Submitting...');
       fetch(SIGNUP_URL, { method: 'POST', mode: 'no-cors', body: new FormData(form) })
         .then(function () {
-          status.textContent = "Thanks for joining! We'll keep you posted on this topic.";
+          status.textContent = t('thanksTopic', "Thanks for joining! We'll keep you posted on this topic.");
           form.reset();
         })
         .catch(function () {
-          status.textContent = 'Something went wrong. Please try again.';
+          status.textContent = t('error', 'Something went wrong. Please try again.');
         })
         .finally(function () {
           btn.disabled = false;

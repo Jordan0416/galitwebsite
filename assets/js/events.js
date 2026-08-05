@@ -102,7 +102,7 @@
       });
       var cta = document.createElement('a');
       cta.className = 'cta-button display';
-      cta.textContent = 'RSVP';
+      cta.textContent = (window.SITE_I18N && window.SITE_I18N.t.rsvp) || 'RSVP';
       if (/^https?:\/\//i.test(link)) {
         cta.href = link;
         cta.target = '_blank';
@@ -119,7 +119,8 @@
     if (!count) {
       var note = document.createElement('p');
       note.className = 'events-note';
-      note.textContent = 'New events are coming soon — check back or follow along on social media.';
+      note.textContent = (window.SITE_I18N && window.SITE_I18N.t.comingSoon) ||
+        'New events are coming soon — check back or follow along on social media.';
       container.appendChild(note);
     }
   }
