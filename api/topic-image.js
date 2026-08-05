@@ -4,12 +4,12 @@
 // downloads the xlsx, finds the image anchored to the requested row, and
 // streams it back. Cached at the CDN for 5 minutes.
 //
-// GET /api/topic-image?row=<0-based sheet row index>
+// GET /api/topic-image?row=<0-based sheet row index>[&tab=topics|events]
 
 const zlib = require('zlib');
 
 const SHEET_ID = '1mFQzN_YO7R8no0IDtPvohxOKMBSjvaX2_TLQVXtcOpY';
-const SHEET_TAB = 'Talking Topics';
+const TABS = { topics: 'Talking Topics', events: 'Website Events' };
 const XLSX_URL = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/export?format=xlsx';
 
 let xlsxCache = { at: 0, promise: null };
@@ -76,11 +76,12 @@ module.exports = async (req, res) => {
       return;
     }
 
+    const tabName = TABS[req.query.tab] || TABS.topics;
     const entries = zipEntries(await getXlsx());
 
-    // Which worksheet file is the Talking Topics tab?
+    // Which worksheet file is the requested tab?
     const wb = readXml(entries, 'xl/workbook.xml');
-    const sheetTag = wb.match(new RegExp('<sheet[^>]*name="' + SHEET_TAB + '"[^>]*r:id="(rId\\d+)"'));
+    const sheetTag = wb.match(new RegExp('<sheet[^>]*name="' + tabName + '"[^>]*r:id="(rId\\d+)"'));
     if (!sheetTag) { res.status(404).send('tab not found'); return; }
     const wbRels = readXml(entries, 'xl/_rels/workbook.xml.rels');
     const relTag = wbRels.match(new RegExp('Id="' + sheetTag[1] + '"[^>]*Target="([^"]+)"'));
