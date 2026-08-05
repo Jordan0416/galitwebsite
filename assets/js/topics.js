@@ -130,6 +130,9 @@
 
       var summary = document.createElement('summary');
       var titleLines = title.split('\n').map(function (s) { return s.trim(); }).filter(Boolean);
+      // Subtitle: column C if filled in, otherwise any extra lines in the title cell
+      var subtitleText = (cols[2] || '').trim().replace(/\s*\n\s*/g, ' ') ||
+        titleLines.slice(1).join(' ');
 
       var imgUrl = (cols[4] || '').trim();
       if (/^https?:\/\//i.test(imgUrl)) {
@@ -154,10 +157,10 @@
       h.className = 'topic-item-title';
       h.textContent = titleLines[0];
       titles.appendChild(h);
-      if (titleLines.length > 1) {
+      if (subtitleText) {
         var sub = document.createElement('span');
         sub.className = 'topic-item-subtitle';
-        sub.textContent = titleLines.slice(1).join(' ');
+        sub.textContent = subtitleText;
         titles.appendChild(sub);
       }
       summary.appendChild(titles);
@@ -167,6 +170,7 @@
       bodyWrap.className = 'topic-item-body';
       var norm = function (s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, ''); };
       var titleSet = titleLines.map(norm);
+      if (subtitleText) titleSet.push(norm(subtitleText));
       var paras = body.split('\n')
         .map(function (s) { return s.trim(); })
         .filter(Boolean);
