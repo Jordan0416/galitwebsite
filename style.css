@@ -63,17 +63,22 @@ a { color: inherit; text-decoration: none; }
   content: "";
   position: absolute;
   top: 50%;
-  left: 587px;
-  width: 1092px;
-  height: 1571px;
+  left: 188px;
+  width: 655px;
+  height: 943px;
   background-image: url('assets/images/galitmoon.png');
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
-  transform: translate(-50%, calc(-50% - 314px)) rotate(8deg);
+  transform: translate(-50%, calc(-50% - 173px)) rotate(8deg);
   opacity: 0.576;
   z-index: -1;
   pointer-events: none;
+}
+
+/* Pages without the dark hero: keep the header moon barely visible */
+body:not(:has(.hero)) .site-header::before {
+  opacity: 0.12;
 }
 
 .logo-block {
@@ -179,7 +184,7 @@ a { color: inherit; text-decoration: none; }
   align-items: center;
   justify-content: center;
   gap: 55px;
-  padding: 65px 60px 0 60px;
+  padding: 175px 60px 0 60px;
   border: 3px solid #d9d9d9;
   border-bottom: none;
 }
@@ -281,14 +286,12 @@ a { color: inherit; text-decoration: none; }
 .hero-photo {
   position: relative;
   order: 2;
-  align-self: center;
+  align-self: flex-end;
   flex-shrink: 0;
-  width: 470px;
-  aspect-ratio: 933 / 1230;
+  width: 874px;
   height: auto;
-  object-fit: cover;
-  object-position: center top;
-  border-radius: 6px 6px 0 0;
+  margin-left: -180px;
+  background: none;
 }
 
 .hero-copy {
@@ -296,12 +299,12 @@ a { color: inherit; text-decoration: none; }
   z-index: 2;
   order: 1;
   align-self: center;
-  margin-left: 264px;
-  max-width: 500px;
+  flex: 1;
+  text-align: center;
 }
 
 .hero-copy h1 {
-  font-size: 43px;
+  font-size: 54px;
   line-height: 1.22;
   margin: 0 0 22px;
   color: #fff;
@@ -309,7 +312,7 @@ a { color: inherit; text-decoration: none; }
 }
 
 .hero-copy p {
-  font-size: 18.5px;
+  font-size: 22px;
   margin: 0 0 26px;
   color: #fff;
 }
@@ -388,6 +391,8 @@ a { color: inherit; text-decoration: none; }
 /* ---------- About photo dots + lightbox slideshow ---------- */
 .about-photo-wrap {
   position: relative;
+  max-width: 860px;
+  margin: 0 auto;
 }
 
 .about-photo-frame {
@@ -445,7 +450,7 @@ a { color: inherit; text-decoration: none; }
   text-transform: uppercase;
   font-weight: 400;
   letter-spacing: 1px;
-  font-size: 46px;
+  font-size: 34px;
   line-height: 1.15;
   text-shadow: 0 2px 14px rgba(0,0,0,0.55);
 }
@@ -456,7 +461,7 @@ a { color: inherit; text-decoration: none; }
   text-transform: uppercase;
   font-weight: 400;
   letter-spacing: 1px;
-  font-size: 46px;
+  font-size: 34px;
   line-height: 1.15;
   text-shadow: 0 2px 14px rgba(0,0,0,0.55);
 }
@@ -470,7 +475,7 @@ a { color: inherit; text-decoration: none; }
   left: 0;
   right: 0;
   bottom: 0;
-  padding: 46px 34px;
+  padding: 34px 30px;
   color: #fff;
   text-align: center;
 }
@@ -478,7 +483,7 @@ a { color: inherit; text-decoration: none; }
 .about-photo-text p {
   font-family: 'EB Garamond', serif;
   font-weight: 700;
-  font-size: 28px;
+  font-size: 21px;
   line-height: 1.5;
   margin: 0 auto;
   max-width: 80%;
@@ -751,9 +756,10 @@ a { color: inherit; text-decoration: none; }
 
 /* ---------- Newsletter ---------- */
 .newsletter {
-  background: #fff;
-  color: var(--dark);
-  padding: 90px 40px;
+  background: radial-gradient(ellipse 900px 420px at 50% -10%, #2c241a 0%, #17130e 55%, #0e0b09 100%);
+  color: #f4efe8;
+  padding: 95px 40px 100px;
+  border-top: 1px solid rgba(217, 194, 163, 0.25);
 }
 
 .newsletter-inner {
@@ -762,49 +768,53 @@ a { color: inherit; text-decoration: none; }
   text-align: center;
 }
 
-.newsletter p.lead {
+.newsletter-title {
   font-family: 'Playfair Display', serif;
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 34px;
+  color: #d9c2a3;
+  margin: 0 0 12px;
+}
+
+.newsletter p.lead {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
   text-align: center;
-  font-size: 24px;
-  color: var(--gold);
-  margin: 0 0 40px;
+  font-size: 20px;
+  color: rgba(244, 239, 232, 0.85);
+  margin: 0 0 38px;
 }
 
 .newsletter form {
   display: flex;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: 14px;
   align-items: center;
   justify-content: center;
 }
 
-.newsletter label {
-  font-family: 'EB Garamond', serif;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  font-size: 14px;
-  color: #777;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
 .newsletter input[type="text"],
 .newsletter input[type="email"] {
-  border: 1px solid #ddd;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(217, 194, 163, 0.4);
   border-radius: 3px;
-  padding: 14px 16px;
+  padding: 15px 18px;
   font-family: 'EB Garamond', serif;
-  font-size: 16px;
-  min-width: 220px;
-  transition: border-color 0.2s ease;
+  font-size: 16.5px;
+  color: #fff;
+  min-width: 230px;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.newsletter input::placeholder {
+  color: rgba(244, 239, 232, 0.55);
 }
 
 .newsletter input[type="text"]:focus,
 .newsletter input[type="email"]:focus {
   outline: none;
-  border-color: var(--gold);
+  border-color: #d9c2a3;
+  background: rgba(255, 255, 255, 0.11);
 }
 
 .newsletter button {
@@ -813,10 +823,16 @@ a { color: inherit; text-decoration: none; }
   background: var(--gold);
   color: #fff;
   font-family: 'Anton', sans-serif;
-  letter-spacing: 1px;
-  padding: 16px 28px;
+  letter-spacing: 1.5px;
+  font-size: 15px;
+  padding: 16px 34px;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.newsletter button:hover {
+  background: #b08d63;
+  transform: translateY(-1px);
 }
 
 .newsletter button:disabled {
@@ -825,14 +841,78 @@ a { color: inherit; text-decoration: none; }
 }
 
 .newsletter-status {
-  margin: 20px 0 0;
-  font-size: 14px;
-  color: var(--gold-dark);
+  margin: 22px 0 0;
+  font-size: 15px;
+  color: #d9c2a3;
   min-height: 1.2em;
 }
 
-.newsletter button:hover {
+/* Per-topic newsletter signup (topics page) */
+.topic-signup {
+  margin-top: 10px;
+  padding: 22px 24px;
+  background: var(--cream);
+  border: 1px solid #ece5dd;
+  border-radius: 4px;
+}
+
+.topic-signup-note {
+  margin: 0 0 14px;
+  font-style: italic;
+  color: var(--gold-dark);
+  font-size: 16.5px;
+}
+
+.topic-signup-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.topic-signup input[type="text"],
+.topic-signup input[type="email"] {
+  flex: 1 1 180px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  padding: 12px 14px;
+  font-family: 'EB Garamond', serif;
+  font-size: 16px;
+  min-width: 0;
+  transition: border-color 0.2s ease;
+}
+
+.topic-signup input:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+.topic-signup button {
+  border: none;
+  border-radius: 3px;
+  background: var(--gold);
+  color: #fff;
+  font-family: 'Anton', sans-serif;
+  letter-spacing: 1px;
+  font-size: 14px;
+  padding: 12px 24px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.topic-signup button:hover {
   background: var(--gold-dark);
+}
+
+.topic-signup button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.topic-signup-status {
+  margin: 12px 0 0;
+  font-size: 14px;
+  color: var(--gold-dark);
+  min-height: 1.2em;
 }
 
 /* ---------- Footer ---------- */
@@ -914,6 +994,89 @@ a { color: inherit; text-decoration: none; }
 
 .topics-list li a:hover {
   color: var(--gold-dark);
+}
+
+/* Sheet-driven topics accordion */
+.topics-accordion {
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+.topic-item {
+  border-bottom: 1px solid #eee;
+}
+
+.topic-item summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 24px 40px 24px 0;
+  position: relative;
+}
+
+.topic-item summary::-webkit-details-marker {
+  display: none;
+}
+
+.topic-item summary::after {
+  content: "+";
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: 'EB Garamond', serif;
+  font-size: 28px;
+  color: var(--gold);
+  transition: transform 0.2s ease;
+}
+
+.topic-item[open] summary::after {
+  content: "\2013";
+}
+
+.topic-item-title {
+  display: block;
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 1.35;
+  color: var(--gold);
+  transition: color 0.2s ease;
+}
+
+.topic-item summary:hover .topic-item-title {
+  color: var(--gold-dark);
+}
+
+.topic-item-subtitle {
+  display: block;
+  margin-top: 4px;
+  font-style: italic;
+  font-size: 17px;
+  color: #888;
+}
+
+.topic-item-body {
+  padding: 4px 0 30px;
+}
+
+.topic-image {
+  width: 100%;
+  max-height: 340px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin: 6px 0 20px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+}
+
+.topic-item-body p {
+  margin: 0 0 18px;
+  font-size: 17.5px;
+}
+
+.topic-item-body .cta-button {
+  margin-top: 6px;
+  font-size: 15px;
+  padding: 13px 26px;
 }
 
 /* ---------- Simple pages ---------- */
@@ -1074,7 +1237,7 @@ a { color: inherit; text-decoration: none; }
     flex-direction: column;
     gap: 0;
     min-height: 0;
-    padding: 56px 24px 0;
+    padding: 86px 24px 0;
     text-align: center;
   }
   .hero-copy {
@@ -1082,14 +1245,17 @@ a { color: inherit; text-decoration: none; }
     margin-left: 0;
   }
   .hero-copy h1 {
-    font-size: 32px;
+    font-size: 36px;
   }
   .hero-copy p {
-    font-size: 17px;
+    font-size: 19px;
+  }
+  .hero-photo {
+    margin-left: 0;
   }
   .hero-photo {
     display: block;
-    width: min(300px, 78vw);
+    width: min(468px, 95vw);
     margin-top: 10px;
   }
   .main-nav ul {
@@ -1099,14 +1265,14 @@ a { color: inherit; text-decoration: none; }
   }
   .site-header::before {
     left: 50%;
-    width: 620px;
-    height: 900px;
-    transform: translate(-50%, calc(-50% - 180px)) rotate(8deg);
+    width: 280px;
+    height: 403px;
+    transform: translate(-50%, calc(-50% - 110px)) rotate(8deg);
     opacity: 0.4;
   }
   /* Pages without the dark hero: fade the moon out before it reaches the text */
   body:not(:has(.hero)) .site-header::before {
-    opacity: 0.3;
+    opacity: 0.12;
     -webkit-mask-image: linear-gradient(to bottom, #000 45%, transparent 72%);
     mask-image: linear-gradient(to bottom, #000 45%, transparent 72%);
   }
@@ -1134,7 +1300,7 @@ a { color: inherit; text-decoration: none; }
     letter-spacing: 1.4px;
   }
   .hero-copy h1 {
-    font-size: 28px;
+    font-size: 31px;
     text-wrap: balance;
   }
   .about-teaser {
