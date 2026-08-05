@@ -14,6 +14,7 @@
 html, body {
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
   color: var(--text);
   font-family: 'EB Garamond', serif;
   font-size: 18px;
@@ -303,24 +304,14 @@ a { color: inherit; text-decoration: none; }
   font-size: 43px;
   line-height: 1.22;
   margin: 0 0 22px;
-  background-image: url('assets/images/galitmoon.png');
-  background-size: 300px auto;
-  background-position: center top;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
-  animation: logo-moon-drift 16s ease-in-out infinite alternate;
-}
-
-@keyframes logo-moon-drift {
-  0% { background-position: center 40%; }
-  100% { background-position: center 60%; }
+  color: #fff;
+  text-shadow: 0 2px 18px rgba(0,0,0,0.45);
 }
 
 .hero-copy p {
   font-size: 18.5px;
   margin: 0 0 26px;
+  color: #fff;
 }
 
 .video-link {
@@ -1077,20 +1068,166 @@ a { color: inherit; text-decoration: none; }
   }
   .cards-row {
     grid-template-columns: 1fr;
+    gap: 26px;
   }
   .hero {
-    min-height: 520px;
-    padding: 60px 24px;
-  }
-  .hero-photo {
-    display: none;
+    flex-direction: column;
+    gap: 0;
+    min-height: 0;
+    padding: 56px 24px 0;
+    text-align: center;
   }
   .hero-copy {
     max-width: 100%;
+    margin-left: 0;
+  }
+  .hero-copy h1 {
+    font-size: 32px;
+  }
+  .hero-copy p {
+    font-size: 17px;
+  }
+  .hero-photo {
+    display: block;
+    width: min(300px, 78vw);
+    margin-top: 10px;
   }
   .main-nav ul {
     gap: 16px;
     flex-wrap: wrap;
+    justify-content: center;
+  }
+  .site-header::before {
+    left: 50%;
+    width: 620px;
+    height: 900px;
+    transform: translate(-50%, calc(-50% - 180px)) rotate(8deg);
+    opacity: 0.4;
+  }
+  /* Pages without the dark hero: fade the moon out before it reaches the text */
+  body:not(:has(.hero)) .site-header::before {
+    opacity: 0.3;
+    -webkit-mask-image: linear-gradient(to bottom, #000 45%, transparent 72%);
+    mask-image: linear-gradient(to bottom, #000 45%, transparent 72%);
+  }
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding: 0 20px;
+  }
+  .site-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 18px 20px 14px;
+    gap: 10px;
+  }
+  .logo {
+    font-size: 26px;
+  }
+  .logo-tagline {
+    font-size: 13px;
+  }
+  .main-nav a {
+    font-size: 13px;
+    letter-spacing: 1.4px;
+  }
+  .hero-copy h1 {
+    font-size: 28px;
+    text-wrap: balance;
+  }
+  .about-teaser {
+    padding: 55px 0;
+  }
+  .about-photo-frame img {
+    aspect-ratio: 4 / 5;
+  }
+  .about-photo-heading {
+    top: 24%;
+  }
+  .about-photo-heading h3,
+  .about-photo-subtitle {
+    font-size: 27px;
+  }
+  .about-photo-subtitle {
+    margin-top: 6px;
+  }
+  .about-photo-text {
+    padding: 24px 18px;
+  }
+  .about-photo-text p {
+    font-size: 17px;
+    max-width: 100%;
+    font-weight: 500;
+  }
+  .slide-arrow {
+    width: 38px;
+    height: 38px;
+    font-size: 14px;
+  }
+  .slide-arrow.prev { left: 10px; }
+  .slide-arrow.next { right: 10px; }
+  .slide-dots {
+    gap: 22px;
+    margin-top: 22px;
+  }
+  .slide-dots .dot img {
+    width: 34px;
+  }
+  .discover-heading {
+    font-size: 22px;
+    margin: 0 0 35px;
+    text-wrap: balance;
+  }
+  .quote {
+    font-size: 17px;
+    margin-bottom: 65px;
+  }
+  .newsletter {
+    padding: 60px 24px;
+  }
+  .newsletter p.lead {
+    font-size: 20px;
+    margin-bottom: 30px;
+  }
+  .newsletter form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .newsletter label {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .newsletter input[type="text"],
+  .newsletter input[type="email"] {
+    width: 100%;
+    min-width: 0;
+  }
+  .newsletter button {
+    width: 100%;
+  }
+  .topics-hero {
+    padding: 55px 24px 70px;
+  }
+  .topics-hero h1 {
+    font-size: 26px;
+    margin-bottom: 35px;
+  }
+  .about-intro,
+  .events-page,
+  .topic-page {
+    padding-top: 55px;
+    padding-bottom: 70px;
+  }
+  .events-page,
+  .topic-page {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  .simple-page {
+    padding: 60px 24px;
   }
 }
 
