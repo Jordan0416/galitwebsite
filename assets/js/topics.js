@@ -1,7 +1,8 @@
 // Loads speaking topics live from the "Talking Topics" tab of the Google Sheet.
-// Primary source: the Apps Script web app (serves JSON and can read images
-// pasted directly into column E cells). Fallback 1: the sheet's public CSV
-// export (text + image links only). Fallback 2: the static list in the page.
+// Text comes from the sheet's public CSV export. Images pasted directly into
+// the sheet are served by /api/topic-image (see api/topic-image.js), which
+// extracts them from the sheet's xlsx export; a pasted image LINK in column E
+// also works. If the sheet is unreachable, the static list in the page stays.
 (function () {
   var SHEET_ID = '1mFQzN_YO7R8no0IDtPvohxOKMBSjvaX2_TLQVXtcOpY';
   var SHEET_TAB = 'Talking Topics';
@@ -114,7 +115,7 @@
     wrap.className = 'topics-accordion';
     var count = 0;
 
-    rows.forEach(function (cols) {
+    rows.forEach(function (cols, rowIndex) {
       var title = (cols[0] || '').trim();
       var shortDesc = (cols[1] || '').trim();
       var longDesc = (cols[3] || '').trim();
@@ -149,14 +150,18 @@
         // Convert Google Drive share links to a direct image URL
         var dm = imgUrl.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?[^ ]*id=)([\w-]+)/);
         if (dm) imgUrl = 'https://drive.google.com/thumbnail?id=' + dm[1] + '&sz=w1200';
-        var img = document.createElement('img');
-        img.className = 'topic-image';
-        img.src = imgUrl;
-        img.alt = titleLines[0];
-        img.loading = 'lazy';
-        img.addEventListener('error', function () { img.remove(); });
-        bodyWrap.appendChild(img);
+      } else {
+        // No link in the sheet — try the image pasted directly into this row
+        // (served by our api; 404s are silently removed below)
+        imgUrl = '/api/topic-image?row=' + rowIndex;
       }
+      var img = document.createElement('img');
+      img.className = 'topic-image';
+      img.src = imgUrl;
+      img.alt = titleLines[0];
+      img.loading = 'lazy';
+      img.addEventListener('error', function () { img.remove(); });
+      bodyWrap.appendChild(img);
       var norm = function (s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, ''); };
       var titleSet = titleLines.map(norm);
       var paras = body.split('\n')
@@ -178,36 +183,12 @@
     if (count) list.replaceWith(wrap);
   }
 
-  function loadFromAppsScript() {
-    return fetch(SIGNUP_URL + '?action=topics')
-      .then(function (res) {
-        if (!res.ok) throw new Error('apps script fetch failed: ' + res.status);
-        return res.json();
-      })
-      .then(function (data) {
-        if (!data || !data.ok || !data.topics || !data.topics.length) {
-          throw new Error('apps script returned no topics');
-        }
-        render(data.topics.map(function (t) {
-          return [t.title || '', t.description || '', '', '', t.image || ''];
-        }));
-      });
-  }
-
-  function loadFromCsv() {
-    return fetch(url)
-      .then(function (res) {
-        if (!res.ok) throw new Error('sheet fetch failed: ' + res.status);
-        return res.text();
-      })
-      .then(function (text) { render(parseCSV(text)); });
-  }
-
-  loadFromAppsScript()
-    .catch(function (err) {
-      console.warn('Apps Script topics unavailable, trying CSV.', err);
-      return loadFromCsv();
+  fetch(url)
+    .then(function (res) {
+      if (!res.ok) throw new Error('sheet fetch failed: ' + res.status);
+      return res.text();
     })
+    .then(function (text) { render(parseCSV(text)); })
     .catch(function (err) {
       console.warn('Topics sheet unavailable, using static list.', err);
       list.style.display = '';
