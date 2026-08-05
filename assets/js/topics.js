@@ -130,20 +130,6 @@
 
       var summary = document.createElement('summary');
       var titleLines = title.split('\n').map(function (s) { return s.trim(); }).filter(Boolean);
-      var h = document.createElement('span');
-      h.className = 'topic-item-title';
-      h.textContent = titleLines[0];
-      summary.appendChild(h);
-      if (titleLines.length > 1) {
-        var sub = document.createElement('span');
-        sub.className = 'topic-item-subtitle';
-        sub.textContent = titleLines.slice(1).join(' ');
-        summary.appendChild(sub);
-      }
-      item.appendChild(summary);
-
-      var bodyWrap = document.createElement('div');
-      bodyWrap.className = 'topic-item-body';
 
       var imgUrl = (cols[4] || '').trim();
       if (/^https?:\/\//i.test(imgUrl)) {
@@ -152,16 +138,33 @@
         if (dm) imgUrl = 'https://drive.google.com/thumbnail?id=' + dm[1] + '&sz=w1200';
       } else {
         // No link in the sheet — try the image pasted directly into this row
-        // (served by our api; 404s are silently removed below)
+        // (served by our api; missing images are silently removed below)
         imgUrl = '/api/topic-image?row=' + rowIndex;
       }
-      var img = document.createElement('img');
-      img.className = 'topic-image';
-      img.src = imgUrl;
-      img.alt = titleLines[0];
-      img.loading = 'lazy';
-      img.addEventListener('error', function () { img.remove(); });
-      bodyWrap.appendChild(img);
+      var thumb = document.createElement('img');
+      thumb.className = 'topic-thumb';
+      thumb.src = imgUrl;
+      thumb.alt = '';
+      thumb.addEventListener('error', function () { thumb.remove(); });
+      summary.appendChild(thumb);
+
+      var titles = document.createElement('span');
+      titles.className = 'topic-item-titles';
+      var h = document.createElement('span');
+      h.className = 'topic-item-title';
+      h.textContent = titleLines[0];
+      titles.appendChild(h);
+      if (titleLines.length > 1) {
+        var sub = document.createElement('span');
+        sub.className = 'topic-item-subtitle';
+        sub.textContent = titleLines.slice(1).join(' ');
+        titles.appendChild(sub);
+      }
+      summary.appendChild(titles);
+      item.appendChild(summary);
+
+      var bodyWrap = document.createElement('div');
+      bodyWrap.className = 'topic-item-body';
       var norm = function (s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, ''); };
       var titleSet = titleLines.map(norm);
       var paras = body.split('\n')

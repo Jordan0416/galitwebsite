@@ -1051,8 +1051,26 @@ body:not(:has(.hero)) .site-header::before {
 .topic-item summary {
   cursor: pointer;
   list-style: none;
-  padding: 26px 52px 26px 0;
+  padding: 22px 52px 22px 0;
   position: relative;
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.topic-thumb {
+  width: 130px;
+  height: 92px;
+  object-fit: cover;
+  border-radius: 5px;
+  flex-shrink: 0;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.14);
+  background: #f2ede7;
+}
+
+.topic-item-titles {
+  flex: 1;
+  min-width: 0;
 }
 
 .topic-item summary::-webkit-details-marker {
@@ -1110,14 +1128,6 @@ body:not(:has(.hero)) .site-header::before {
   padding: 4px 0 30px;
 }
 
-.topic-image {
-  width: 100%;
-  max-height: 340px;
-  object-fit: cover;
-  border-radius: 4px;
-  margin: 6px 0 20px;
-  box-shadow: 0 12px 30px rgba(0,0,0,0.12);
-}
 
 .topic-item-body p {
   margin: 0 0 18px;
@@ -1442,7 +1452,12 @@ body:not(:has(.hero)) .site-header::before {
     padding: 0 20px;
   }
   .topic-item summary {
-    padding: 20px 46px 20px 0;
+    padding: 18px 44px 18px 0;
+    gap: 14px;
+  }
+  .topic-thumb {
+    width: 82px;
+    height: 66px;
   }
   .about-intro,
   .events-page,
