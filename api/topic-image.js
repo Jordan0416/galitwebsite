@@ -16,7 +16,7 @@ let xlsxCache = { at: 0, promise: null };
 
 function getXlsx() {
   const now = Date.now();
-  if (!xlsxCache.promise || now - xlsxCache.at > 5 * 60 * 1000) {
+  if (!xlsxCache.promise || now - xlsxCache.at > 2 * 60 * 1000) {
     xlsxCache = {
       at: now,
       promise: fetch(XLSX_URL).then(r => {
@@ -119,7 +119,7 @@ module.exports = async (req, res) => {
     const ext = mediaPath.split('.').pop().toLowerCase();
     const mime = { png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', gif: 'image/gif', webp: 'image/webp' }[ext] || 'application/octet-stream';
     res.setHeader('Content-Type', mime);
-    res.setHeader('Cache-Control', 'public, s-maxage=300, stale-while-revalidate=600, max-age=60');
+    res.setHeader('Cache-Control', 'public, s-maxage=120, stale-while-revalidate=300, max-age=60');
     res.status(200).send(media.extract());
   } catch (err) {
     res.status(500).send('error: ' + err.message);
