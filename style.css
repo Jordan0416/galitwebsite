@@ -952,19 +952,44 @@ body:not(:has(.hero)) .site-header::before {
 }
 
 /* ---------- Topics page ---------- */
-.topics-hero {
-  background: #fff;
-  padding: 80px 40px 100px;
-  color: var(--dark);
+.topics-banner {
+  position: relative;
+  background: #000;
+  color: #fff;
+  overflow: hidden;
+  text-align: center;
+  padding: 90px 40px 95px;
+  border: 3px solid #d9d9d9;
+  border-bottom: none;
 }
 
-.topics-hero h1 {
-  font-family: 'Playfair Display', serif;
-  font-weight: 700;
-  color: var(--gold);
-  text-align: center;
-  font-size: 34px;
-  margin: 0 0 55px;
+.topics-banner-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.topics-banner h1 {
+  font-size: 40px;
+  line-height: 1.25;
+  margin: 0 0 16px;
+  color: #fff;
+  text-shadow: 0 2px 18px rgba(0,0,0,0.45);
+}
+
+.topics-banner p {
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: 19px;
+  color: #d9c2a3;
+  margin: 0;
+}
+
+.topics-content {
+  background: #fff;
+  padding: 70px 40px 110px;
+  color: var(--dark);
 }
 
 .topics-list {
@@ -998,18 +1023,35 @@ body:not(:has(.hero)) .site-header::before {
 
 /* Sheet-driven topics accordion */
 .topics-accordion {
-  max-width: 780px;
+  max-width: 820px;
   margin: 0 auto;
 }
 
 .topic-item {
-  border-bottom: 1px solid #eee;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  box-shadow: 0 10px 28px rgba(0,0,0,0.06);
+  margin-bottom: 20px;
+  padding: 0 30px;
+  transition: box-shadow 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+
+.topic-item:hover {
+  border-color: #e3d5c4;
+  box-shadow: 0 16px 38px rgba(0,0,0,0.1);
+  transform: translateY(-2px);
+}
+
+.topic-item[open] {
+  border-color: #d9c2a3;
+  box-shadow: 0 18px 44px rgba(0,0,0,0.12);
 }
 
 .topic-item summary {
   cursor: pointer;
   list-style: none;
-  padding: 24px 40px 24px 0;
+  padding: 26px 52px 26px 0;
   position: relative;
 }
 
@@ -1020,17 +1062,26 @@ body:not(:has(.hero)) .site-header::before {
 .topic-item summary::after {
   content: "+";
   position: absolute;
-  right: 6px;
+  right: 0;
   top: 50%;
   transform: translateY(-50%);
+  width: 34px;
+  height: 34px;
+  line-height: 32px;
+  text-align: center;
+  border: 1px solid #d9c2a3;
+  border-radius: 50%;
   font-family: 'EB Garamond', serif;
-  font-size: 28px;
+  font-size: 22px;
   color: var(--gold);
-  transition: transform 0.2s ease;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 .topic-item[open] summary::after {
   content: "\2013";
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #fff;
 }
 
 .topic-item-title {
@@ -1374,12 +1425,24 @@ body:not(:has(.hero)) .site-header::before {
   .newsletter button {
     width: 100%;
   }
-  .topics-hero {
-    padding: 55px 24px 70px;
+  .topics-banner {
+    padding: 55px 24px 60px;
   }
-  .topics-hero h1 {
-    font-size: 26px;
-    margin-bottom: 35px;
+  .topics-banner h1 {
+    font-size: 27px;
+    text-wrap: balance;
+  }
+  .topics-banner p {
+    font-size: 17px;
+  }
+  .topics-content {
+    padding: 45px 20px 80px;
+  }
+  .topic-item {
+    padding: 0 20px;
+  }
+  .topic-item summary {
+    padding: 20px 46px 20px 0;
   }
   .about-intro,
   .events-page,

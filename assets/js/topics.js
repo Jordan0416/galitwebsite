@@ -1,6 +1,7 @@
 // Loads speaking topics live from the "Talking Topics" tab of the Google Sheet.
-// The sheet only needs to be shared as "anyone with the link can view".
-// If the fetch fails, the static list already in the page stays as a fallback.
+// Primary source: the Apps Script web app (serves JSON and can read images
+// pasted directly into column E cells). Fallback 1: the sheet's public CSV
+// export (text + image links only). Fallback 2: the static list in the page.
 (function () {
   var SHEET_ID = '1mFQzN_YO7R8no0IDtPvohxOKMBSjvaX2_TLQVXtcOpY';
   var SHEET_TAB = 'Talking Topics';
@@ -177,12 +178,36 @@
     if (count) list.replaceWith(wrap);
   }
 
-  fetch(url)
-    .then(function (res) {
-      if (!res.ok) throw new Error('sheet fetch failed: ' + res.status);
-      return res.text();
+  function loadFromAppsScript() {
+    return fetch(SIGNUP_URL + '?action=topics')
+      .then(function (res) {
+        if (!res.ok) throw new Error('apps script fetch failed: ' + res.status);
+        return res.json();
+      })
+      .then(function (data) {
+        if (!data || !data.ok || !data.topics || !data.topics.length) {
+          throw new Error('apps script returned no topics');
+        }
+        render(data.topics.map(function (t) {
+          return [t.title || '', t.description || '', '', '', t.image || ''];
+        }));
+      });
+  }
+
+  function loadFromCsv() {
+    return fetch(url)
+      .then(function (res) {
+        if (!res.ok) throw new Error('sheet fetch failed: ' + res.status);
+        return res.text();
+      })
+      .then(function (text) { render(parseCSV(text)); });
+  }
+
+  loadFromAppsScript()
+    .catch(function (err) {
+      console.warn('Apps Script topics unavailable, trying CSV.', err);
+      return loadFromCsv();
     })
-    .then(function (text) { render(parseCSV(text)); })
     .catch(function (err) {
       console.warn('Topics sheet unavailable, using static list.', err);
       list.style.display = '';
