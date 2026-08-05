@@ -67,14 +67,19 @@
       } else {
         imgUrl = '/api/topic-image?tab=events&row=' + rowIndex;
       }
+      var pageUrl = 'event.html?e=' + rowIndex;
+
+      var imgLink = document.createElement('a');
+      imgLink.href = pageUrl;
       var img = document.createElement('img');
       img.src = imgUrl;
       img.alt = title;
       img.addEventListener('error', function () {
-        img.remove();
+        imgLink.remove();
         card.classList.add('no-image');
       });
-      card.appendChild(img);
+      imgLink.appendChild(img);
+      card.appendChild(imgLink);
 
       var body = document.createElement('div');
       body.className = 'event-card-body';
@@ -85,7 +90,11 @@
         body.appendChild(d);
       }
       var h = document.createElement('h2');
-      h.textContent = title;
+      var titleLink = document.createElement('a');
+      titleLink.href = pageUrl;
+      titleLink.className = 'event-title-link';
+      titleLink.textContent = title;
+      h.appendChild(titleLink);
       body.appendChild(h);
       if (location) {
         var loc = document.createElement('p');
@@ -102,14 +111,8 @@
       });
       var cta = document.createElement('a');
       cta.className = 'cta-button display';
-      cta.textContent = (window.SITE_I18N && window.SITE_I18N.t.rsvp) || 'RSVP';
-      if (/^https?:\/\//i.test(link)) {
-        cta.href = link;
-        cta.target = '_blank';
-        cta.rel = 'noopener';
-      } else {
-        cta.href = 'contact.html';
-      }
+      cta.textContent = (window.SITE_I18N && window.SITE_I18N.t.details) || 'Event details';
+      cta.href = pageUrl;
       body.appendChild(cta);
       card.appendChild(body);
 

@@ -19,6 +19,9 @@
       thanksTopic: "Thanks for joining! We'll keep you posted on this topic.",
       error: 'Something went wrong. Please try again.',
       rsvp: 'RSVP',
+      details: 'Event details',
+      allEvents: '← All Events',
+      eventNotFound: 'This event could not be found — it may have passed or been removed.',
       comingSoon: 'New events are coming soon — check back or follow along on social media.'
     },
     he: {
@@ -30,6 +33,9 @@
       thanksTopic: 'תודה שהצטרפתם! נעדכן אתכם בנושא זה.',
       error: 'משהו השתבש. אנא נסו שוב.',
       rsvp: 'הרשמה',
+      details: 'פרטי האירוע',
+      allEvents: '→ כל האירועים',
+      eventNotFound: 'האירוע לא נמצא — ייתכן שהוא חלף או הוסר.',
       comingSoon: 'אירועים חדשים יפורסמו בקרוב — חזרו לבקר או עקבו ברשתות החברתיות.'
     }
   };
