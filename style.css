@@ -301,7 +301,12 @@ body:not(:has(.hero)) .site-header::before {
   align-self: center;
   flex: 1;
   text-align: center;
-  transform: translateX(30%);
+  transform: translate(30%, -20%);
+}
+
+/* Hebrew: hero text sits 40% further left than the English position */
+html[lang="he"] .hero-copy {
+  transform: translate(-10%, -20%);
 }
 
 .hero-copy h1 {
@@ -313,7 +318,7 @@ body:not(:has(.hero)) .site-header::before {
 }
 
 .hero-copy p {
-  font-size: 22px;
+  font-size: 26px;
   margin: 0 0 26px;
   color: #fff;
 }
@@ -1383,7 +1388,7 @@ body:not(:has(.hero)) .site-header::before {
     font-size: 36px;
   }
   .hero-copy p {
-    font-size: 19px;
+    font-size: 21px;
   }
   .hero-photo {
     margin-left: 0;
