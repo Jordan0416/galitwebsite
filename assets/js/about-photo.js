@@ -37,8 +37,6 @@
 
   var dots = Array.prototype.slice.call(dotsWrap.querySelectorAll('.dot'));
   var current = 0;
-  var timer;
-
   function show(i) {
     current = (i + slides.length) % slides.length;
 
@@ -65,21 +63,14 @@
   function goNext() { show(current + 1); }
   function goPrev() { show(current - 1); }
 
-  function startAutoplay() {
-    clearInterval(timer);
-    timer = setInterval(goNext, 10000);
-  }
-
   dots.forEach(function (dot, i) {
     dot.addEventListener('click', function () {
       show(i);
-      startAutoplay();
     });
   });
 
-  if (prevBtn) prevBtn.addEventListener('click', function () { goPrev(); startAutoplay(); });
-  if (nextBtn) nextBtn.addEventListener('click', function () { goNext(); startAutoplay(); });
+  if (prevBtn) prevBtn.addEventListener('click', goPrev);
+  if (nextBtn) nextBtn.addEventListener('click', goNext);
 
   show(0);
-  startAutoplay();
 })();

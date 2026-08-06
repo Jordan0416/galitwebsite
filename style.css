@@ -301,12 +301,12 @@ body:not(:has(.hero)) .site-header::before {
   align-self: center;
   flex: 1;
   text-align: center;
-  transform: translate(30%, -20%);
+  transform: translate(30%, -45%);
 }
 
 /* Hebrew: hero text sits 40% further left than the English position */
 html[lang="he"] .hero-copy {
-  transform: translate(-10%, -20%);
+  transform: translate(-10%, -45%);
 }
 
 .hero-copy h1 {
