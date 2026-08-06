@@ -148,6 +148,30 @@
         showNotFound();
         return;
       }
+      var i18n = window.SITE_I18N;
+      if (i18n && i18n.lang === 'he' && i18n.translate) {
+        var fields = [0, 1, 2, 3];
+        var texts = [];
+        var slots = [];
+        fields.forEach(function (c) {
+          (cols[c] || '').split('\n').forEach(function (line, part) {
+            texts.push(line);
+            slots.push({ c: c, part: part });
+          });
+        });
+        return i18n.translate(texts).then(function (out) {
+          var copy = cols.slice();
+          var cells = {};
+          out.forEach(function (tr, i) {
+            var s = slots[i];
+            (cells[s.c] = cells[s.c] || [])[s.part] = tr;
+          });
+          Object.keys(cells).forEach(function (c) {
+            copy[c] = cells[c].join('\n');
+          });
+          render(copy, rowIndex);
+        });
+      }
       render(cols, rowIndex);
     })
     .catch(function () { showNotFound(); });

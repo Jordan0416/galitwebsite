@@ -43,6 +43,36 @@
     return rows;
   }
 
+  // Hebrew mode: machine-translate the text column before rendering.
+  function translateAboutRows(rows, norm) {
+    var i18n = window.SITE_I18N;
+    if (!i18n || i18n.lang !== 'he' || !i18n.translate) return Promise.resolve(rows);
+    var texts = [];
+    var slots = [];
+    rows.forEach(function (cols, r) {
+      var type = norm(cols[0]);
+      if (type.indexOf('type') === 0 || type === 'image' || type === 'photo') return;
+      var v = cols[1] || '';
+      if (!v.trim()) return;
+      v.split('\n').forEach(function (line, part) {
+        texts.push(line);
+        slots.push({ r: r, part: part });
+      });
+    });
+    return i18n.translate(texts).then(function (out) {
+      var copy = rows.map(function (cols) { return cols.slice(); });
+      var cells = {};
+      out.forEach(function (tr, i) {
+        var s = slots[i];
+        (cells[s.r] = cells[s.r] || [])[s.part] = tr;
+      });
+      Object.keys(cells).forEach(function (r) {
+        copy[r][1] = cells[r].join('\n');
+      });
+      return copy;
+    });
+  }
+
   fetch(url)
     .then(function (res) {
       if (!res.ok) throw new Error('sheet fetch failed: ' + res.status);
@@ -58,6 +88,11 @@
         throw new Error('Website About tab not found');
       }
 
+      return translateAboutRows(rows, norm);
+    })
+    .then(function (rows) {
+      if (!rows) return;
+      var norm = function (s) { return (s || '').toLowerCase().replace(/[^a-z]/g, ''); };
       var frag = document.createDocumentFragment();
       var blocks = 0;
       rows.forEach(function (cols, rowIndex) {

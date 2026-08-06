@@ -40,7 +40,29 @@
     }
   };
 
-  window.SITE_I18N = { lang: lang, t: dynamic[lang] };
+  function buildI18n(l) {
+    return {
+      lang: l,
+      t: dynamic[l],
+      // Translate an array of strings for the current language.
+      // English (or any failure) resolves to the originals untouched.
+      translate: function (texts) {
+        if (l !== 'he' || !texts.length) return Promise.resolve(texts);
+        return fetch('/api/translate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ q: texts, target: 'he' })
+        })
+          .then(function (r) { if (!r.ok) throw new Error('translate ' + r.status); return r.json(); })
+          .then(function (d) {
+            return (d.translations && d.translations.length === texts.length) ? d.translations : texts;
+          })
+          .catch(function () { return texts; });
+      }
+    };
+  }
+
+  window.SITE_I18N = buildI18n(lang);
 
   // Static text translations: selector → Hebrew. English originals are
   // captured from the page itself before the first swap.
@@ -102,7 +124,7 @@
   function applyLang(next) {
     lang = next;
     localStorage.setItem(LANG_KEY, lang);
-    window.SITE_I18N = { lang: lang, t: dynamic[lang] };
+    window.SITE_I18N = buildI18n(lang);
     document.documentElement.lang = lang;
     document.documentElement.dir = lang === 'he' ? 'rtl' : 'ltr';
 
@@ -208,7 +230,15 @@
       toggle.className = 'lang-toggle';
       toggle.setAttribute('aria-label', 'Switch language / החלפת שפה');
       toggle.addEventListener('click', function () {
-        applyLang(lang === 'he' ? 'en' : 'he');
+        var next = lang === 'he' ? 'en' : 'he';
+        // Pages with sheet-driven content reload so it re-renders
+        // (and machine-translates) in the new language.
+        if (document.querySelector('.topics-accordion, .topics-list, #eventsList, #eventDetail, #aboutText')) {
+          localStorage.setItem(LANG_KEY, next);
+          location.reload();
+        } else {
+          applyLang(next);
+        }
       });
       header.appendChild(toggle);
     }

@@ -128,6 +128,41 @@
     }
   }
 
+  // Hebrew mode: machine-translate date/title/location/description
+  // before rendering; the header row is left untouched.
+  function translateEventRows(rows) {
+    var i18n = window.SITE_I18N;
+    if (!i18n || i18n.lang !== 'he' || !i18n.translate) return Promise.resolve(rows);
+    var texts = [];
+    var slots = [];
+    rows.forEach(function (cols, r) {
+      var t = (cols[1] || '').trim().toLowerCase().replace(/[^a-z]/g, '');
+      if (t === 'eventtitle') return;
+      [0, 1, 2, 3].forEach(function (c) {
+        var v = cols[c] || '';
+        if (!v.trim()) return;
+        v.split('\n').forEach(function (line, part) {
+          texts.push(line);
+          slots.push({ r: r, c: c, part: part });
+        });
+      });
+    });
+    return i18n.translate(texts).then(function (out) {
+      var copy = rows.map(function (cols) { return cols.slice(); });
+      var cells = {};
+      out.forEach(function (tr, i) {
+        var s = slots[i];
+        var key = s.r + ':' + s.c;
+        (cells[key] = cells[key] || [])[s.part] = tr;
+      });
+      Object.keys(cells).forEach(function (key) {
+        var rc = key.split(':');
+        copy[rc[0]][rc[1]] = cells[key].join('\n');
+      });
+      return copy;
+    });
+  }
+
   fetch(url)
     .then(function (res) {
       if (!res.ok) throw new Error('sheet fetch failed: ' + res.status);
@@ -142,7 +177,7 @@
       if (normH(head[1]) !== 'eventtitle' && normH(head[0]) !== 'date') {
         throw new Error('Website Events tab not found (create it with the header row)');
       }
-      render(rows);
+      return translateEventRows(rows).then(render);
     })
     .catch(function (err) {
       console.warn('Events sheet unavailable, using static content.', err);

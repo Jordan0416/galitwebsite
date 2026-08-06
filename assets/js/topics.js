@@ -194,12 +194,48 @@
     if (count) list.replaceWith(wrap);
   }
 
+  // In Hebrew mode, machine-translate the sheet text (cols A/B/C) before
+  // rendering. Header rows are left untouched so they're still skipped.
+  function translateRows(rows) {
+    var i18n = window.SITE_I18N;
+    if (!i18n || i18n.lang !== 'he' || !i18n.translate) return Promise.resolve(rows);
+    var texts = [];
+    var slots = [];
+    rows.forEach(function (cols, r) {
+      var t = (cols[0] || '').trim().toLowerCase().replace(/[^a-z]/g, '');
+      if (t === 'topictitle') return;
+      [0, 1, 2].forEach(function (c) {
+        var v = cols[c] || '';
+        if (!v.trim()) return;
+        v.split('\n').forEach(function (line, part) {
+          texts.push(line);
+          slots.push({ r: r, c: c, part: part });
+        });
+      });
+    });
+    return i18n.translate(texts).then(function (out) {
+      var copy = rows.map(function (cols) { return cols.slice(); });
+      var cells = {};
+      out.forEach(function (tr, i) {
+        var s = slots[i];
+        var key = s.r + ':' + s.c;
+        (cells[key] = cells[key] || [])[s.part] = tr;
+      });
+      Object.keys(cells).forEach(function (key) {
+        var rc = key.split(':');
+        copy[rc[0]][rc[1]] = cells[key].join('\n');
+      });
+      return copy;
+    });
+  }
+
   fetch(url)
     .then(function (res) {
       if (!res.ok) throw new Error('sheet fetch failed: ' + res.status);
       return res.text();
     })
-    .then(function (text) { render(parseCSV(text)); })
+    .then(function (text) { return translateRows(parseCSV(text)); })
+    .then(render)
     .catch(function (err) {
       console.warn('Topics sheet unavailable, using static list.', err);
       list.style.display = '';
