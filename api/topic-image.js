@@ -9,7 +9,7 @@
 const zlib = require('zlib');
 
 const SHEET_ID = '1mFQzN_YO7R8no0IDtPvohxOKMBSjvaX2_TLQVXtcOpY';
-const TABS = { topics: 'Talking Topics', events: 'Website Events' };
+const TABS = { topics: 'Talking Topics', events: 'Website Events', about: 'Website About' };
 const XLSX_URL = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/export?format=xlsx';
 
 let xlsxCache = { at: 0, promise: null };
