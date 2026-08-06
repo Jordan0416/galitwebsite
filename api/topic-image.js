@@ -4,7 +4,10 @@
 // downloads the xlsx, finds the image anchored to the requested row, and
 // streams it back. Cached at the CDN for 5 minutes.
 //
-// GET /api/topic-image?row=<0-based sheet row index>[&tab=topics|events]
+// GET /api/topic-image?row=<0-based sheet row index>[&tab=topics|events|about][&col=<0-based column>]
+// Without col, the first image anchored to the row is returned; with col,
+// only an image anchored to that exact cell matches (used for the event
+// galleries where one row can hold several images).
 
 const zlib = require('zlib');
 
@@ -99,15 +102,17 @@ module.exports = async (req, res) => {
     const drawingRels = readXml(entries, 'xl/drawings/_rels/' + drawingFile + '.rels');
 
     // Find the image anchored to the requested row
+    const wantCol = req.query.col === undefined ? null : parseInt(req.query.col, 10);
     const anchors = drawing.match(/<xdr:(?:two|one)CellAnchor[^>]*>[\s\S]*?<\/xdr:(?:two|one)CellAnchor>/g) || [];
     let embedId = null;
     for (const a of anchors) {
-      const rowMatch = a.match(/<xdr:from>[\s\S]*?<xdr:row>(\d+)<\/xdr:row>/);
+      const from = a.match(/<xdr:from>[\s\S]*?<xdr:col>(\d+)<\/xdr:col>[\s\S]*?<xdr:row>(\d+)<\/xdr:row>/);
       const embed = a.match(/r:embed="(rId\d+)"/);
-      if (rowMatch && embed && parseInt(rowMatch[1], 10) === row) {
-        embedId = embed[1];
-        break;
-      }
+      if (!from || !embed) continue;
+      if (parseInt(from[2], 10) !== row) continue;
+      if (wantCol !== null && parseInt(from[1], 10) !== wantCol) continue;
+      embedId = embed[1];
+      break;
     }
     if (!embedId) { res.status(404).send('no image for row'); return; }
 

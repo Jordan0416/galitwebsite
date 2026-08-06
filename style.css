@@ -1211,7 +1211,29 @@ html[lang="he"] .hero-copy {
   color: var(--gold);
 }
 
+.event-meta {
+  font-weight: 700;
+  font-size: 17.5px;
+  color: var(--dark);
+  margin: 0 0 16px;
+}
+
 /* ---------- Single event page ---------- */
+.event-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin: -16px 0 28px;
+}
+
+.event-gallery img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 5px;
+  box-shadow: 0 10px 26px rgba(0,0,0,0.12);
+}
+
 .event-detail {
   max-width: 800px;
 }

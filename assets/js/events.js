@@ -1,6 +1,9 @@
 // Loads events live from the "Website Events" tab of the Google Sheet.
-// Columns: A date, B title, C location, D description,
-//          E image (pasted onto the row, or a link), F RSVP link (optional).
+// Columns: A date, B title, C location, D description (event page only),
+//          E main image (pasted onto the cell, or a link), F RSVP link,
+//          G trip length (bold on card), H price (bold on card),
+//          I/J/K up to three extra images (shown on the event page).
+// The listing cards stay minimal — full text lives on each event's page.
 // Images pasted into the sheet are served by /api/topic-image?tab=events.
 // If the tab doesn't exist or can't be reached, the example content
 // already in the page stays as a fallback.
@@ -51,8 +54,8 @@
       var date = (cols[0] || '').trim();
       var title = (cols[1] || '').trim();
       var location = (cols[2] || '').trim();
-      var desc = (cols[3] || '').trim();
-      var link = (cols[5] || '').trim();
+      var duration = (cols[6] || '').trim();
+      var price = (cols[7] || '').trim();
       if (!title) return;
       if (title.toLowerCase().replace(/[^a-z]/g, '') === 'eventtitle') return; // header row
       count++;
@@ -65,7 +68,7 @@
         var dm = imgUrl.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?[^ ]*id=)([\w-]+)/);
         if (dm) imgUrl = 'https://drive.google.com/thumbnail?id=' + dm[1] + '&sz=w1200';
       } else {
-        imgUrl = '/api/topic-image?tab=events&row=' + rowIndex;
+        imgUrl = '/api/topic-image?tab=events&row=' + rowIndex + '&col=4';
       }
       var pageUrl = 'event.html?e=' + rowIndex;
 
@@ -102,13 +105,12 @@
         loc.textContent = location;
         body.appendChild(loc);
       }
-      desc.split('\n').forEach(function (para) {
-        para = para.trim();
-        if (!para) return;
-        var p = document.createElement('p');
-        p.textContent = para;
-        body.appendChild(p);
-      });
+      if (duration || price) {
+        var meta = document.createElement('p');
+        meta.className = 'event-meta';
+        meta.textContent = [duration, price].filter(Boolean).join('  ·  ');
+        body.appendChild(meta);
+      }
       var cta = document.createElement('a');
       cta.className = 'cta-button display';
       cta.textContent = (window.SITE_I18N && window.SITE_I18N.t.details) || 'Event details';
@@ -138,7 +140,7 @@
     rows.forEach(function (cols, r) {
       var t = (cols[1] || '').trim().toLowerCase().replace(/[^a-z]/g, '');
       if (t === 'eventtitle') return;
-      [0, 1, 2, 3].forEach(function (c) {
+      [0, 1, 2, 6, 7].forEach(function (c) {
         var v = cols[c] || '';
         if (!v.trim()) return;
         v.split('\n').forEach(function (line, part) {

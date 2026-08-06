@@ -61,12 +61,24 @@
     container.appendChild(msg);
   }
 
+  function imageUrlFor(raw, rowIndex, col) {
+    raw = (raw || '').trim();
+    if (/^https?:\/\//i.test(raw)) {
+      var dm = raw.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?[^ ]*id=)([\w-]+)/);
+      if (dm) return 'https://drive.google.com/thumbnail?id=' + dm[1] + '&sz=w1600';
+      return raw;
+    }
+    return '/api/topic-image?tab=events&row=' + rowIndex + '&col=' + col;
+  }
+
   function render(cols, rowIndex) {
     var date = (cols[0] || '').trim();
     var title = (cols[1] || '').trim();
     var location = (cols[2] || '').trim();
     var desc = (cols[3] || '').trim();
     var link = (cols[5] || '').trim();
+    var duration = (cols[6] || '').trim();
+    var price = (cols[7] || '').trim();
 
     document.title = title + ' | Dr Galit Ben Tovel';
     container.innerHTML = '';
@@ -75,19 +87,28 @@
     var wrap = document.createElement('div');
     wrap.className = 'event-detail';
 
-    var imgUrl = (cols[4] || '').trim();
-    if (/^https?:\/\//i.test(imgUrl)) {
-      var dm = imgUrl.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?[^ ]*id=)([\w-]+)/);
-      if (dm) imgUrl = 'https://drive.google.com/thumbnail?id=' + dm[1] + '&sz=w1600';
-    } else {
-      imgUrl = '/api/topic-image?tab=events&row=' + rowIndex;
-    }
     var img = document.createElement('img');
     img.className = 'event-detail-img';
-    img.src = imgUrl;
+    img.src = imageUrlFor(cols[4], rowIndex, 4);
     img.alt = title;
     img.addEventListener('error', function () { img.remove(); });
     wrap.appendChild(img);
+
+    // Up to three extra images from columns I, J, K
+    var gallery = document.createElement('div');
+    gallery.className = 'event-gallery';
+    [8, 9, 10].forEach(function (col) {
+      var g = document.createElement('img');
+      g.src = imageUrlFor(cols[col], rowIndex, col);
+      g.alt = '';
+      g.loading = 'lazy';
+      g.addEventListener('error', function () {
+        g.remove();
+        if (!gallery.children.length) gallery.remove();
+      });
+      gallery.appendChild(g);
+    });
+    wrap.appendChild(gallery);
 
     if (date) {
       var d = document.createElement('span');
@@ -104,6 +125,12 @@
       loc.className = 'event-location';
       loc.textContent = location;
       wrap.appendChild(loc);
+    }
+    if (duration || price) {
+      var meta = document.createElement('p');
+      meta.className = 'event-meta';
+      meta.textContent = [duration, price].filter(Boolean).join('  ·  ');
+      wrap.appendChild(meta);
     }
     desc.split('\n').forEach(function (para) {
       para = para.trim();
@@ -150,7 +177,7 @@
       }
       var i18n = window.SITE_I18N;
       if (i18n && i18n.lang === 'he' && i18n.translate) {
-        var fields = [0, 1, 2, 3];
+        var fields = [0, 1, 2, 3, 6, 7];
         var texts = [];
         var slots = [];
         fields.forEach(function (c) {
