@@ -54,8 +54,6 @@
       var date = (cols[0] || '').trim();
       var title = (cols[1] || '').trim();
       var location = (cols[2] || '').trim();
-      var duration = (cols[6] || '').trim();
-      var price = (cols[7] || '').trim();
       if (!title) return;
       if (title.toLowerCase().replace(/[^a-z]/g, '') === 'eventtitle') return; // header row
       count++;
@@ -105,12 +103,6 @@
         loc.textContent = location;
         body.appendChild(loc);
       }
-      if (duration || price) {
-        var meta = document.createElement('p');
-        meta.className = 'event-meta';
-        meta.textContent = [duration, price].filter(Boolean).join('  ·  ');
-        body.appendChild(meta);
-      }
       var cta = document.createElement('a');
       cta.className = 'cta-button display';
       cta.textContent = (window.SITE_I18N && window.SITE_I18N.t.details) || 'Event details';
@@ -140,7 +132,7 @@
     rows.forEach(function (cols, r) {
       var t = (cols[1] || '').trim().toLowerCase().replace(/[^a-z]/g, '');
       if (t === 'eventtitle') return;
-      [0, 1, 2, 6, 7].forEach(function (c) {
+      [0, 1, 2].forEach(function (c) {
         var v = cols[c] || '';
         if (!v.trim()) return;
         v.split('\n').forEach(function (line, part) {
