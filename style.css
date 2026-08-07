@@ -1219,11 +1219,26 @@ html[lang="he"] .hero-copy {
 }
 
 /* ---------- Single event page ---------- */
+.event-detail {
+  display: flex;
+  align-items: flex-start;
+  gap: 44px;
+  max-width: 1100px;
+}
+
+.event-detail-main {
+  flex: 1;
+  min-width: 0;
+}
+
 .event-gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 12px;
-  margin: -16px 0 28px;
+  width: 280px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: sticky;
+  top: 30px;
 }
 
 .event-gallery img {
@@ -1232,6 +1247,21 @@ html[lang="he"] .hero-copy {
   object-fit: cover;
   border-radius: 5px;
   box-shadow: 0 10px 26px rgba(0,0,0,0.12);
+}
+
+@media (max-width: 860px) {
+  .event-detail {
+    flex-direction: column;
+    gap: 0;
+  }
+  .event-gallery {
+    position: static;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin: 24px 0 0;
+  }
 }
 
 .event-itinerary-title {
@@ -1365,10 +1395,6 @@ html[dir="rtl"] .event-itinerary li::before {
   .rsvp-row {
     flex-direction: column;
   }
-}
-
-.event-detail {
-  max-width: 800px;
 }
 
 .event-detail-img {

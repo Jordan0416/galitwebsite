@@ -88,13 +88,15 @@
 
     var wrap = document.createElement('div');
     wrap.className = 'event-detail';
+    var main = document.createElement('div');
+    main.className = 'event-detail-main';
 
     var img = document.createElement('img');
     img.className = 'event-detail-img';
     img.src = imageUrlFor(cols[4], rowIndex, 4);
     img.alt = title;
     img.addEventListener('error', function () { img.remove(); });
-    wrap.appendChild(img);
+    main.appendChild(img);
 
     // Up to three extra images from columns I, J, K
     var gallery = document.createElement('div');
@@ -110,36 +112,35 @@
       });
       gallery.appendChild(g);
     });
-    wrap.appendChild(gallery);
 
     if (date) {
       var d = document.createElement('span');
       d.className = 'event-date';
       d.textContent = date;
-      wrap.appendChild(d);
+      main.appendChild(d);
     }
     var h = document.createElement('h1');
     h.className = 'gold-heading event-detail-title';
     h.textContent = title;
-    wrap.appendChild(h);
+    main.appendChild(h);
     if (location) {
       var loc = document.createElement('p');
       loc.className = 'event-location';
       loc.textContent = location;
-      wrap.appendChild(loc);
+      main.appendChild(loc);
     }
     if (duration || price) {
       var meta = document.createElement('p');
       meta.className = 'event-meta';
       meta.textContent = [duration, price].filter(Boolean).join('  ·  ');
-      wrap.appendChild(meta);
+      main.appendChild(meta);
     }
     desc.split('\n').forEach(function (para) {
       para = para.trim();
       if (!para) return;
       var p = document.createElement('p');
       p.textContent = para;
-      wrap.appendChild(p);
+      main.appendChild(p);
     });
 
     // Itinerary from column L — one line per item/day
@@ -147,7 +148,7 @@
       var itHeading = document.createElement('h2');
       itHeading.className = 'event-itinerary-title';
       itHeading.textContent = t('itinerary', 'Itinerary');
-      wrap.appendChild(itHeading);
+      main.appendChild(itHeading);
       var list = document.createElement('ul');
       list.className = 'event-itinerary';
       itinerary.split('\n').forEach(function (line) {
@@ -165,7 +166,7 @@
         }
         list.appendChild(li);
       });
-      wrap.appendChild(list);
+      main.appendChild(list);
     }
 
     var cta = document.createElement('a');
@@ -176,7 +177,7 @@
       cta.href = link;
       cta.target = '_blank';
       cta.rel = 'noopener';
-      wrap.appendChild(cta);
+      main.appendChild(cta);
     } else {
       var form = buildRsvpForm(title, date);
       cta.href = '#rsvp';
@@ -189,10 +190,12 @@
           if (first) first.focus();
         }
       });
-      wrap.appendChild(cta);
-      wrap.appendChild(form);
+      main.appendChild(cta);
+      main.appendChild(form);
     }
 
+    wrap.appendChild(main);
+    wrap.appendChild(gallery);
     container.appendChild(wrap);
   }
 
