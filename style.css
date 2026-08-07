@@ -1234,6 +1234,97 @@ html[lang="he"] .hero-copy {
   box-shadow: 0 10px 26px rgba(0,0,0,0.12);
 }
 
+/* RSVP form on the event page */
+.rsvp-form {
+  display: none;
+  margin-top: 26px;
+  padding: 26px 28px;
+  background: var(--cream);
+  border: 1px solid #ece5dd;
+  border-radius: 6px;
+  max-width: 640px;
+}
+
+.rsvp-form.open {
+  display: block;
+}
+
+.rsvp-form-title {
+  font-family: 'Playfair Display', 'Frank Ruhl Libre', serif;
+  font-weight: 700;
+  font-size: 21px;
+  color: var(--gold-dark);
+  margin: 0 0 16px;
+}
+
+.rsvp-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.rsvp-row input {
+  flex: 1;
+  min-width: 0;
+}
+
+.rsvp-form input,
+.rsvp-form textarea {
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  padding: 12px 14px;
+  font-family: 'EB Garamond', serif;
+  font-size: 16px;
+  width: 100%;
+  transition: border-color 0.2s ease;
+}
+
+.rsvp-form textarea {
+  resize: vertical;
+  margin-bottom: 12px;
+}
+
+.rsvp-form input:focus,
+.rsvp-form textarea:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+.rsvp-form button[type="submit"] {
+  border: none;
+  border-radius: 3px;
+  background: var(--gold);
+  color: #fff;
+  font-family: 'Anton', sans-serif;
+  letter-spacing: 1px;
+  font-size: 14px;
+  padding: 13px 28px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.rsvp-form button[type="submit"]:hover {
+  background: var(--gold-dark);
+}
+
+.rsvp-form button[type="submit"]:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.rsvp-status {
+  margin: 12px 0 0;
+  font-size: 14px;
+  color: var(--gold-dark);
+  min-height: 1.2em;
+}
+
+@media (max-width: 640px) {
+  .rsvp-row {
+    flex-direction: column;
+  }
+}
+
 .event-detail {
   max-width: 800px;
 }
