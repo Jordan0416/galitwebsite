@@ -1234,6 +1234,48 @@ html[lang="he"] .hero-copy {
   box-shadow: 0 10px 26px rgba(0,0,0,0.12);
 }
 
+.event-itinerary-title {
+  font-family: 'Playfair Display', 'Frank Ruhl Libre', serif;
+  font-weight: 700;
+  font-size: 25px;
+  color: var(--gold);
+  margin: 34px 0 14px;
+}
+
+.event-itinerary {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 30px;
+  max-width: 720px;
+}
+
+.event-itinerary li {
+  position: relative;
+  padding: 10px 0 10px 26px;
+  border-bottom: 1px solid #f0eae2;
+}
+
+html[dir="rtl"] .event-itinerary li {
+  padding: 10px 26px 10px 0;
+}
+
+.event-itinerary li::before {
+  content: "☾";
+  position: absolute;
+  left: 0;
+  top: 10px;
+  color: var(--gold);
+}
+
+html[dir="rtl"] .event-itinerary li::before {
+  left: auto;
+  right: 0;
+}
+
+.event-itinerary strong {
+  color: var(--gold-dark);
+}
+
 /* RSVP form on the event page */
 .rsvp-form {
   display: none;

@@ -80,6 +80,7 @@
     var link = (cols[5] || '').trim();
     var duration = (cols[6] || '').trim();
     var price = (cols[7] || '').trim();
+    var itinerary = (cols[11] || '').trim();
 
     document.title = title + ' | Dr Galit Ben Tovel';
     container.innerHTML = '';
@@ -140,6 +141,32 @@
       p.textContent = para;
       wrap.appendChild(p);
     });
+
+    // Itinerary from column L — one line per item/day
+    if (itinerary) {
+      var itHeading = document.createElement('h2');
+      itHeading.className = 'event-itinerary-title';
+      itHeading.textContent = t('itinerary', 'Itinerary');
+      wrap.appendChild(itHeading);
+      var list = document.createElement('ul');
+      list.className = 'event-itinerary';
+      itinerary.split('\n').forEach(function (line) {
+        line = line.trim();
+        if (!line) return;
+        var li = document.createElement('li');
+        var m = line.match(/^([^:—-]{1,30})[:—-]\s*(.+)$/);
+        if (m) {
+          var strong = document.createElement('strong');
+          strong.textContent = m[1].trim() + ': ';
+          li.appendChild(strong);
+          li.appendChild(document.createTextNode(m[2]));
+        } else {
+          li.textContent = line;
+        }
+        list.appendChild(li);
+      });
+      wrap.appendChild(list);
+    }
 
     var cta = document.createElement('a');
     cta.className = 'cta-button display';
@@ -217,6 +244,18 @@
     formType.value = 'rsvp';
     form.appendChild(formType);
 
+    // Compatibility fields: if the sheet's receiver is an older version
+    // without RSVP routing, these make the full submission readable in
+    // the Signups tab instead of losing data.
+    var compatName = document.createElement('input');
+    compatName.type = 'hidden';
+    compatName.name = 'name';
+    form.appendChild(compatName);
+    var compatTopic = document.createElement('input');
+    compatTopic.type = 'hidden';
+    compatTopic.name = 'topic';
+    form.appendChild(compatTopic);
+
     var btn = document.createElement('button');
     btn.type = 'submit';
     btn.className = 'display';
@@ -230,6 +269,10 @@
 
     form.addEventListener('submit', function (ev) {
       ev.preventDefault();
+      compatName.value = (form.firstName.value + ' ' + form.lastName.value).trim();
+      compatTopic.value = 'RSVP: ' + eventField.value +
+        ' | phone: ' + form.phone.value +
+        (form.notes.value ? ' | notes: ' + form.notes.value : '');
       btn.disabled = true;
       status.textContent = t('submitting', 'Submitting...');
       fetch(SIGNUP_URL, { method: 'POST', mode: 'no-cors', body: new FormData(form) })
@@ -270,7 +313,7 @@
       }
       var i18n = window.SITE_I18N;
       if (i18n && i18n.lang === 'he' && i18n.translate) {
-        var fields = [0, 1, 2, 3, 6, 7];
+        var fields = [0, 1, 2, 3, 6, 7, 11];
         var texts = [];
         var slots = [];
         fields.forEach(function (c) {

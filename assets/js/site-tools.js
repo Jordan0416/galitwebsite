@@ -27,6 +27,7 @@
       notes: 'Anything we should know? (optional)',
       sendRsvp: 'Send RSVP',
       thanksRsvp: "Thanks! Your spot is noted — we'll be in touch soon.",
+      itinerary: 'Itinerary',
       allEvents: '← All Events',
       eventNotFound: 'This event could not be found — it may have passed or been removed.',
       comingSoon: 'New events are coming soon — check back or follow along on social media.'
@@ -48,6 +49,7 @@
       notes: 'משהו שכדאי שנדע? (אופציונלי)',
       sendRsvp: 'שליחת הרשמה',
       thanksRsvp: 'תודה! ההרשמה נקלטה — ניצור קשר בקרוב.',
+      itinerary: 'מסלול הטיול',
       allEvents: '→ כל האירועים',
       eventNotFound: 'האירוע לא נמצא — ייתכן שהוא חלף או הוסר.',
       comingSoon: 'אירועים חדשים יפורסמו בקרוב — חזרו לבקר או עקבו ברשתות החברתיות.'
