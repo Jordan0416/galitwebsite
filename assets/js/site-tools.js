@@ -84,7 +84,7 @@
   // captured from the page itself before the first swap.
   var T = [
     { s: '.logo', he: 'ד״ר גלית בן טובאל' },
-    { s: '.logo-tagline', he: 'סופרת / חוקרת / מחנכת' },
+    { s: '.logo-tagline', he: 'סופרת / חוקרת / מרצה' },
     { s: '.main-nav a[href="about.html"]', he: 'אודות' },
     { s: '.main-nav a[href="events.html"]', he: 'אירועים' },
     { s: '.main-nav a[href="topics.html"]', he: 'נושאים' },
