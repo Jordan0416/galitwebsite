@@ -208,56 +208,13 @@ body:not(:has(.hero)) .site-header::before {
 }
 
 @keyframes star-twinkle {
-  0%, 100% { opacity: 0.15; }
-  50% { opacity: 1; }
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 0.6; }
 }
 
 @keyframes star-drift {
   0% { transform: translate(0, 0); }
   100% { transform: translate(var(--drift-x, 10px), var(--drift-y, 8px)); }
-}
-
-.starfield .shooting-star {
-  position: absolute;
-  width: 2px;
-  height: 2px;
-  background: #fff;
-  border-radius: 50%;
-  opacity: 0;
-  box-shadow: 0 0 6px 1px rgba(255,255,255,0.8);
-  animation-name: shooting-star;
-  animation-timing-function: cubic-bezier(0.2, 0.6, 0.2, 1);
-  animation-iteration-count: infinite;
-}
-
-.starfield .shooting-star::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 110px;
-  height: 1px;
-  transform-origin: right center;
-  transform: translate(-100%, -50%) rotate(32deg);
-  background: linear-gradient(90deg, rgba(255,255,255,0.9), rgba(255,255,255,0));
-}
-
-@keyframes shooting-star {
-  0% {
-    opacity: 0;
-    transform: translate(0, 0);
-  }
-  4% {
-    opacity: 1;
-  }
-  22% {
-    opacity: 0;
-    transform: translate(260px, 165px);
-  }
-  100% {
-    opacity: 0;
-    transform: translate(260px, 165px);
-  }
 }
 
 .hero-glow {

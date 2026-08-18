@@ -2,22 +2,22 @@
   var field = document.getElementById('starfield');
   if (!field) return;
 
-  var COUNT = 260;
+  var COUNT = 120;
   for (var i = 0; i < COUNT; i++) {
     var star = document.createElement('div');
     star.className = 'star';
 
-    var size = Math.random() * 2.2 + 0.8;
+    var size = Math.random() * 1.6 + 0.6;
     star.style.width = size + 'px';
     star.style.height = size + 'px';
     star.style.left = (Math.random() * 100) + '%';
     star.style.top = (Math.random() * 100) + '%';
-    star.style.opacity = (Math.random() * 0.5 + 0.35).toFixed(2);
+    star.style.opacity = (Math.random() * 0.3 + 0.2).toFixed(2);
 
     var anims = [];
-    if (Math.random() < 0.7) {
-      var twinkleDur = (1.4 + Math.random() * 2).toFixed(2);
-      var twinkleDelay = (Math.random() * 3.2).toFixed(2);
+    if (Math.random() < 0.4) {
+      var twinkleDur = (3 + Math.random() * 3).toFixed(2);
+      var twinkleDelay = (Math.random() * 4).toFixed(2);
       anims.push('star-twinkle ' + twinkleDur + 's ease-in-out ' + twinkleDelay + 's infinite');
     }
     if (Math.random() < 0.75) {
@@ -32,18 +32,6 @@
     }
 
     field.appendChild(star);
-  }
-
-  // A handful of shooting stars that streak across on their own random cadence.
-  var SHOOTERS = 9;
-  for (var j = 0; j < SHOOTERS; j++) {
-    var shooter = document.createElement('div');
-    shooter.className = 'shooting-star';
-    shooter.style.top = (Math.random() * 55) + '%';
-    shooter.style.left = (Math.random() * 60) + '%';
-    shooter.style.animationDuration = (5.5 + Math.random() * 2.5).toFixed(2) + 's';
-    shooter.style.animationDelay = (Math.random() * 12).toFixed(2) + 's';
-    field.appendChild(shooter);
   }
 
   var hero = field.closest('.hero');
