@@ -857,9 +857,15 @@ body:has(.hero) .site-header::before {
   font-size: 14px;
 }
 
-/* ---------- About page ---------- */
+/* ---------- About page (dark) ---------- */
+body:has(.about-intro) {
+  background: #000;
+}
+
 .about-intro {
   padding: 90px 0;
+  background: #000;
+  color: #fff;
 }
 
 .about-intro .grid {
