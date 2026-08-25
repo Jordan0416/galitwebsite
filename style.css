@@ -51,7 +51,7 @@ a { color: inherit; text-decoration: none; }
   align-items: center;
   justify-content: space-between;
   padding: 20px 40px;
-  background: rgba(0,0,0,0.15);
+  background: var(--gold);
   position: relative;
   z-index: 10;
   flex-wrap: wrap;
@@ -81,6 +81,11 @@ body:not(:has(.hero)) .site-header::before {
   opacity: 0.12;
 }
 
+/* Home: no header moon */
+body:has(.hero) .site-header::before {
+  display: none;
+}
+
 .logo-block {
   display: flex;
   flex-direction: column;
@@ -96,7 +101,7 @@ body:not(:has(.hero)) .site-header::before {
   font-size: 32.5px;
   letter-spacing: 0.3px;
   transition: opacity 0.2s ease;
-  color: var(--dark);
+  color: #fff;
 }
 
 .logo-tagline {
@@ -104,7 +109,7 @@ body:not(:has(.hero)) .site-header::before {
   font-size: 16.8px;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: #000;
+  color: #fff;
 }
 
 .logo-block:hover .logo {
@@ -120,12 +125,12 @@ body:not(:has(.hero)) .site-header::before {
 }
 
 .social-icons a {
-  color: var(--dark);
+  color: #fff;
   transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .social-icons a:hover {
-  color: var(--gold);
+  color: rgba(255,255,255,0.65);
   transform: translateY(-2px);
 }
 
@@ -144,6 +149,7 @@ body:not(:has(.hero)) .site-header::before {
 }
 
 .main-nav a {
+  color: #fff;
   font-family: 'EB Garamond', serif;
   font-size: 15px;
   letter-spacing: 1.8px;
@@ -160,13 +166,13 @@ body:not(:has(.hero)) .site-header::before {
   right: 100%;
   bottom: 0;
   height: 1px;
-  background: var(--gold);
+  background: #fff;
   transition: right 0.25s ease;
 }
 
 .main-nav a:hover,
 .main-nav a.active {
-  color: var(--gold);
+  color: rgba(255,255,255,0.85);
 }
 
 .main-nav a:hover::after,
@@ -177,14 +183,13 @@ body:not(:has(.hero)) .site-header::before {
 /* ---------- Hero (home) ---------- */
 .hero {
   position: relative;
-  background: #000;
-  color: #fff;
+  background: #6b6b6b url('assets/images/card-events.jpg') center / cover no-repeat;
+  color: #111;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 55px;
-  padding: 175px 60px 0 60px;
+  padding: 233px 60px 92px;
   border: 3px solid #d9d9d9;
   border-bottom: none;
 }
@@ -217,53 +222,11 @@ body:not(:has(.hero)) .site-header::before {
   100% { transform: translate(var(--drift-x, 10px), var(--drift-y, 8px)); }
 }
 
-.hero-glow {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  background: radial-gradient(
-    circle 220px at var(--mx, 50%) var(--my, 50%),
-    rgba(255, 246, 224, 0.16),
-    rgba(217, 194, 163, 0.07) 45%,
-    transparent 72%
-  );
-}
-
-.hero:hover .hero-glow {
-  opacity: 1;
-}
-
-.hero .moon {
-  display: none;
-}
-
-.hero-photo {
-  position: relative;
-  order: 2;
-  align-self: flex-end;
-  flex-shrink: 0;
-  width: 874px;
-  height: auto;
-  margin-left: -180px;
-  background: none;
-}
-
 .hero-copy {
   position: relative;
   z-index: 2;
-  order: 1;
-  align-self: center;
-  flex: 1;
   text-align: center;
-  transform: translate(30%, -45%);
-}
-
-/* Hebrew: hero text sits 40% further left than the English position */
-html[lang="he"] .hero-copy {
-  transform: translate(-10%, -45%);
+  max-width: 980px;
 }
 
 .hero-copy h1 {
@@ -271,13 +234,20 @@ html[lang="he"] .hero-copy {
   line-height: 1.22;
   margin: 0 0 22px;
   color: #fff;
-  text-shadow: 0 2px 18px rgba(0,0,0,0.45);
+  text-shadow:
+    -2px -2px 0 var(--gold), 2px -2px 0 var(--gold), -2px 2px 0 var(--gold), 2px 2px 0 var(--gold),
+    -2px 0 0 var(--gold), 2px 0 0 var(--gold), 0 -2px 0 var(--gold), 0 2px 0 var(--gold);
+}
+
+.hero-copy h1 .hero-line-2 {
+  font-size: 0.7em;
 }
 
 .hero-copy p {
   font-size: 26px;
   margin: 0 0 26px;
   color: #fff;
+  text-shadow: -0.25px -0.25px 0 var(--gold), 0.25px -0.25px 0 var(--gold), -0.25px 0.25px 0 var(--gold), 0.25px 0.25px 0 var(--gold);
 }
 
 .video-link {
@@ -1514,28 +1484,18 @@ html[dir="rtl"] .event-itinerary li::before {
     flex-direction: column;
     gap: 0;
     min-height: 0;
-    padding: 86px 24px 0;
+    padding: 130px 24px 42px;
     text-align: center;
   }
   .hero-copy {
     max-width: 100%;
     margin-left: 0;
-    transform: none;
   }
   .hero-copy h1 {
     font-size: 36px;
   }
   .hero-copy p {
     font-size: 21px;
-  }
-  .hero-photo {
-    margin-left: 0;
-  }
-  .hero-photo {
-    display: block;
-    width: calc(100% + 48px);
-    max-width: 560px;
-    margin: 6px -24px 0;
   }
   .main-nav ul {
     gap: 16px;
@@ -1825,9 +1785,9 @@ html[dir="rtl"] .event-itinerary li::before {
 
 /* ---------- Language toggle ---------- */
 .lang-toggle {
-  border: 1px solid var(--gold);
+  border: 1px solid rgba(255,255,255,0.8);
   background: none;
-  color: var(--gold-dark);
+  color: #fff;
   font-family: 'Heebo', 'EB Garamond', sans-serif;
   font-size: 14px;
   letter-spacing: 0.5px;
@@ -1838,8 +1798,8 @@ html[dir="rtl"] .event-itinerary li::before {
 }
 
 .lang-toggle:hover {
-  background: var(--gold);
-  color: #fff;
+  background: #fff;
+  color: var(--gold-dark);
 }
 
 /* ---------- Hebrew typography ---------- */

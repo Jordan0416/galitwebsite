@@ -92,8 +92,8 @@
     { s: '.main-nav a[href="contact.html"]', he: 'צור קשר' },
     { s: '.site-footer', he: '© 2026 ד״ר גלית בן טובאל. כל הזכויות שמורות.' },
     // Home
-    { s: '.hero-copy h1', he: 'הביטו למעלה!<br>יש תבונה ירחית מעליכם.', html: true },
-    { s: '.hero-copy p', he: 'תרבויות עתיקות הבינו זאת.<br>לימוד מקצביה יכול לשנות את חייכם!!', html: true },
+    { s: '.hero-copy h1', he: 'מה יכול העולם העתיק<br><span class="hero-line-2">ללמד אותנו על החיים היום?</span>', html: true },
+    { s: '.hero-copy p', he: 'על פני תרבויות עתיקות, ידע נשכח מציע דרך אחרת להבין את עצמנו, את עולמנו ואת מקומנו בתוכו.', html: true },
     { s: '.discover-heading', he: 'גלו כיצד תבונה עתיקה יכולה להנחות את חייכם המודרניים.' },
     { s: '.card[href="shop.html"] h3', he: 'ספרים' },
     { s: '.card[href="shop.html"] p', he: 'בקרוב' },
