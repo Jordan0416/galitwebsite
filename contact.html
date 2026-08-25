@@ -47,10 +47,24 @@
     <p>For speaking engagements and inquiries, reach out &mdash; details coming soon.</p>
   </section>
 
+  <section class="newsletter">
+    <div class="newsletter-inner">
+      <h2 class="newsletter-title">Join the conversation</h2>
+      <p class="lead">Exclusive updates and free wisdom, delivered directly to your inbox.</p>
+      <form id="newsletterForm">
+        <input type="text" name="name" placeholder="Your name" required>
+        <input type="email" name="email" placeholder="Your email" required>
+        <button type="submit" class="display">Sign up</button>
+      </form>
+      <p class="newsletter-status" id="newsletterStatus" aria-live="polite"></p>
+    </div>
+  </section>
+
   <footer class="site-footer">
     &copy; 2026 Dr Galit Ben Tovel. All rights reserved.
   </footer>
 
   <script src="assets/js/site-tools.js"></script>
+  <script src="assets/js/newsletter.js"></script>
 </body>
 </html>
