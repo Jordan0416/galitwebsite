@@ -92,8 +92,9 @@
     { s: '.main-nav a[href="contact.html"]', he: 'צור קשר' },
     { s: '.site-footer', he: '© 2026 ד״ר גלית בן טובאל. כל הזכויות שמורות.' },
     // Home
-    { s: '.hero-copy h1', he: 'מה יכול העולם העתיק<br><span class="hero-line-2">ללמד אותנו על החיים היום?</span>', html: true },
-    { s: '.hero-copy p', he: 'גלו דרך אחרת להבין את עצמנו, את עולמנו ואת מקומנו בתוכו.', html: true },
+    { s: '.hero-kicker', he: 'הצטרפו אליי למסע לגילוי מחדש של' },
+    { s: '.hero-copy h1', he: 'החוכמה העתיקה<br>של האנושות', html: true },
+    { s: '.hero-sub', he: 'יחד נחקור מה הידע הזה יכול ללמד אותנו על החיים היום.' },
     { s: '.discover-heading', he: 'גלו כיצד תבונה עתיקה יכולה להנחות את חייכם המודרניים.' },
     { s: '.card[href="shop.html"] h3', he: 'ספרים' },
     { s: '.card[href="shop.html"] p', he: 'בקרוב' },

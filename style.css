@@ -1,11 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Anton&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=EB+Garamond:ital@0;1&family=Heebo:wght@400;500;700&family=Frank+Ruhl+Libre:wght@500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=EB+Garamond:ital@0;1&family=Heebo:wght@400;500;700&family=Frank+Ruhl+Libre:wght@500;700&family=League+Spartan:wght@700&family=Karla:ital@0;1&display=swap');
 
 :root {
-  --gold: #9b7b5d;
-  --gold-dark: #7e6349;
-  --dark: #1e1e1e;
-  --text: #333333;
-  --cream: #faf8f6;
+  --accent: #4a5266;
+  --accent-dark: #343b4c;
+  --accent-light: #c5cbd9;
+  --dark: #1c1f29;
+  --text: #30343e;
+  --cream: #f6f7f9;
   --max: 1200px;
 }
 
@@ -42,7 +43,7 @@ a { color: inherit; text-decoration: none; }
 .gold-heading {
   font-family: 'Playfair Display', serif;
   font-weight: 700;
-  color: var(--gold);
+  color: var(--accent);
 }
 
 /* ---------- Header ---------- */
@@ -51,7 +52,7 @@ a { color: inherit; text-decoration: none; }
   align-items: center;
   justify-content: space-between;
   padding: 20px 40px;
-  background: var(--gold);
+  background: var(--accent);
   position: relative;
   z-index: 10;
   flex-wrap: wrap;
@@ -182,16 +183,44 @@ body:has(.hero) .site-header::before {
 
 /* ---------- Hero (home) ---------- */
 .hero {
+  --hero-h: clamp(480px, 48.4vw, 820px);
   position: relative;
-  background: #6b6b6b url('assets/images/card-events.jpg') center / cover no-repeat;
-  color: #111;
+  background: #2b303d url('assets/images/hero-mountains.jpg') center bottom / cover no-repeat;
+  color: #fff;
   overflow: hidden;
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 233px 60px 92px;
-  border: 3px solid #d9d9d9;
-  border-bottom: none;
+  justify-content: flex-end;
+  min-height: var(--hero-h);
+}
+
+/* Soft moonlight spilling down from under the header */
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 39%;
+  width: 62%;
+  height: 23%;
+  transform: translateX(-50%);
+  background: radial-gradient(
+    ellipse 50% 100% at 50% 0,
+    #fff,
+    rgba(255, 255, 255, 0.85) 22%,
+    rgba(255, 255, 255, 0.4) 48%,
+    rgba(255, 255, 255, 0.1) 76%,
+    transparent
+  );
+  pointer-events: none;
+}
+
+/* Hebrew: keep the portrait on the right, looking toward the text */
+html[dir="rtl"] .hero {
+  direction: ltr;
+}
+
+html[dir="rtl"] .hero-copy {
+  direction: rtl;
 }
 
 .starfield {
@@ -226,28 +255,50 @@ body:has(.hero) .site-header::before {
   position: relative;
   z-index: 2;
   text-align: center;
-  max-width: 980px;
+  max-width: 46vw;
+  /* bottom margin lifts the text above the vertical centre */
+  margin: 0 1.5vw 9.6vw 0;
 }
 
 .hero-copy h1 {
-  font-size: 54px;
-  line-height: 1.22;
-  margin: 0 0 22px;
+  font-family: 'League Spartan', 'Heebo', sans-serif;
+  font-weight: 700;
+  font-size: clamp(34px, 4.25vw, 74px);
+  line-height: 1.17;
+  letter-spacing: 0;
+  margin: 0 0 1.5vw;
   color: #fff;
-  text-shadow:
-    -2px -2px 0 var(--gold), 2px -2px 0 var(--gold), -2px 2px 0 var(--gold), 2px 2px 0 var(--gold),
-    -2px 0 0 var(--gold), 2px 0 0 var(--gold), 0 -2px 0 var(--gold), 0 2px 0 var(--gold);
 }
 
-.hero-copy h1 .hero-line-2 {
-  font-size: 0.7em;
+.hero-kicker,
+.hero-sub {
+  font-family: 'Karla', 'Heebo', sans-serif;
+  color: #fff;
 }
 
-.hero-copy p {
-  font-size: 26px;
-  margin: 0 0 26px;
-  color: #fff;
-  text-shadow: -0.25px -0.25px 0 var(--gold), 0.25px -0.25px 0 var(--gold), -0.25px 0.25px 0 var(--gold), 0.25px 0.25px 0 var(--gold);
+.hero-kicker {
+  font-size: clamp(19px, 2.2vw, 38px);
+  line-height: 1.3;
+  margin: 0 0 1.4vw;
+}
+
+.hero-sub {
+  font-size: clamp(17px, 1.88vw, 32px);
+  font-style: italic;
+  line-height: 1.35;
+  margin: 0;
+  text-wrap: pretty;
+}
+
+.hero-photo {
+  position: relative;
+  z-index: 1;
+  align-self: flex-end;
+  flex-shrink: 0;
+  height: calc(var(--hero-h) - 2.4vw);
+  width: auto;
+  max-width: none;
+  margin-right: -5.5vw;
 }
 
 .video-link {
@@ -255,7 +306,7 @@ body:has(.hero) .site-header::before {
   align-items: center;
   gap: 14px;
   font-family: 'Anton', sans-serif;
-  color: #d9c2a3;
+  color: var(--accent-light);
   letter-spacing: 2px;
   font-size: 20px;
   transition: color 0.2s ease;
@@ -311,14 +362,14 @@ body:has(.hero) .site-header::before {
 .about-teaser .more-link {
   display: inline-block;
   margin-top: 18px;
-  color: var(--gold);
+  color: var(--accent);
   font-style: italic;
   border-bottom: 1px solid transparent;
   transition: border-color 0.2s ease;
 }
 
 .about-teaser .more-link:hover {
-  border-color: var(--gold);
+  border-color: var(--accent);
 }
 
 /* ---------- About photo dots + lightbox slideshow ---------- */
@@ -499,7 +550,7 @@ body:has(.hero) .site-header::before {
 .lightbox {
   position: fixed;
   inset: 0;
-  background: rgba(10,8,7,0.9);
+  background: rgba(12,14,20,0.9);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -689,10 +740,10 @@ body:has(.hero) .site-header::before {
 
 /* ---------- Newsletter ---------- */
 .newsletter {
-  background: radial-gradient(ellipse 900px 420px at 50% -10%, #2c241a 0%, #17130e 55%, #0e0b09 100%);
-  color: #f4efe8;
+  background: radial-gradient(ellipse 900px 420px at 50% -10%, #2f3545 0%, #1c1f29 55%, #14161d 100%);
+  color: #eef0f5;
   padding: 95px 40px 100px;
-  border-top: 1px solid rgba(217, 194, 163, 0.25);
+  border-top: 1px solid rgba(197, 203, 217, 0.25);
 }
 
 .newsletter-inner {
@@ -705,7 +756,7 @@ body:has(.hero) .site-header::before {
   font-family: 'Playfair Display', serif;
   font-weight: 700;
   font-size: 34px;
-  color: #d9c2a3;
+  color: var(--accent-light);
   margin: 0 0 12px;
 }
 
@@ -714,7 +765,7 @@ body:has(.hero) .site-header::before {
   font-style: italic;
   text-align: center;
   font-size: 20px;
-  color: rgba(244, 239, 232, 0.85);
+  color: rgba(238, 240, 245, 0.85);
   margin: 0 0 38px;
 }
 
@@ -729,7 +780,7 @@ body:has(.hero) .site-header::before {
 .newsletter input[type="text"],
 .newsletter input[type="email"] {
   background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(217, 194, 163, 0.4);
+  border: 1px solid rgba(197, 203, 217, 0.4);
   border-radius: 3px;
   padding: 15px 18px;
   font-family: 'EB Garamond', serif;
@@ -740,20 +791,20 @@ body:has(.hero) .site-header::before {
 }
 
 .newsletter input::placeholder {
-  color: rgba(244, 239, 232, 0.55);
+  color: rgba(238, 240, 245, 0.55);
 }
 
 .newsletter input[type="text"]:focus,
 .newsletter input[type="email"]:focus {
   outline: none;
-  border-color: #d9c2a3;
+  border-color: var(--accent-light);
   background: rgba(255, 255, 255, 0.11);
 }
 
 .newsletter button {
   border: none;
   border-radius: 3px;
-  background: var(--gold);
+  background: #677291;
   color: #fff;
   font-family: 'Anton', sans-serif;
   letter-spacing: 1.5px;
@@ -764,7 +815,7 @@ body:has(.hero) .site-header::before {
 }
 
 .newsletter button:hover {
-  background: #b08d63;
+  background: #7b86a5;
   transform: translateY(-1px);
 }
 
@@ -776,7 +827,7 @@ body:has(.hero) .site-header::before {
 .newsletter-status {
   margin: 22px 0 0;
   font-size: 15px;
-  color: #d9c2a3;
+  color: var(--accent-light);
   min-height: 1.2em;
 }
 
@@ -785,14 +836,14 @@ body:has(.hero) .site-header::before {
   margin-top: 10px;
   padding: 22px 24px;
   background: var(--cream);
-  border: 1px solid #ece5dd;
+  border: 1px solid #e2e5eb;
   border-radius: 4px;
 }
 
 .topic-signup-note {
   margin: 0 0 14px;
   font-style: italic;
-  color: var(--gold-dark);
+  color: var(--accent-dark);
   font-size: 16.5px;
 }
 
@@ -816,13 +867,13 @@ body:has(.hero) .site-header::before {
 
 .topic-signup input:focus {
   outline: none;
-  border-color: var(--gold);
+  border-color: var(--accent);
 }
 
 .topic-signup button {
   border: none;
   border-radius: 3px;
-  background: var(--gold);
+  background: var(--accent);
   color: #fff;
   font-family: 'Anton', sans-serif;
   letter-spacing: 1px;
@@ -833,7 +884,7 @@ body:has(.hero) .site-header::before {
 }
 
 .topic-signup button:hover {
-  background: var(--gold-dark);
+  background: var(--accent-dark);
 }
 
 .topic-signup button:disabled {
@@ -844,13 +895,13 @@ body:has(.hero) .site-header::before {
 .topic-signup-status {
   margin: 12px 0 0;
   font-size: 14px;
-  color: var(--gold-dark);
+  color: var(--accent-dark);
   min-height: 1.2em;
 }
 
 /* ---------- Footer ---------- */
 .site-footer {
-  background: #1e1e1e;
+  background: var(--dark);
   color: #ccc;
   text-align: center;
   padding: 28px 20px;
@@ -859,13 +910,17 @@ body:has(.hero) .site-header::before {
 
 /* ---------- About page (dark) ---------- */
 body:has(.about-intro) {
-  background: #000;
+  background: var(--dark);
 }
 
 .about-intro {
   padding: 90px 0;
-  background: #000;
+  background: var(--dark);
   color: #fff;
+}
+
+.about-intro .gold-heading {
+  color: var(--accent-light);
 }
 
 .about-intro .grid {
@@ -893,7 +948,7 @@ body:has(.about-intro) {
 /* ---------- Topics page ---------- */
 .topics-banner {
   position: relative;
-  background: #000;
+  background: var(--dark);
   color: #fff;
   overflow: hidden;
   text-align: center;
@@ -921,7 +976,7 @@ body:has(.about-intro) {
   font-family: 'EB Garamond', serif;
   font-style: italic;
   font-size: 19px;
-  color: #d9c2a3;
+  color: var(--accent-light);
   margin: 0;
 }
 
@@ -950,14 +1005,14 @@ body:has(.about-intro) {
 }
 
 .topics-list li a {
-  color: var(--gold);
+  color: var(--accent);
   text-decoration: underline;
   font-weight: 600;
   transition: color 0.2s ease;
 }
 
 .topics-list li a:hover {
-  color: var(--gold-dark);
+  color: var(--accent-dark);
 }
 
 /* Sheet-driven topics accordion */
@@ -977,13 +1032,13 @@ body:has(.about-intro) {
 }
 
 .topic-item:hover {
-  border-color: #e3d5c4;
+  border-color: #d5d9e2;
   box-shadow: 0 16px 38px rgba(0,0,0,0.1);
   transform: translateY(-2px);
 }
 
 .topic-item[open] {
-  border-color: #d9c2a3;
+  border-color: var(--accent-light);
   box-shadow: 0 18px 44px rgba(0,0,0,0.12);
 }
 
@@ -1004,7 +1059,7 @@ body:has(.about-intro) {
   border-radius: 5px;
   flex-shrink: 0;
   box-shadow: 0 8px 20px rgba(0,0,0,0.14);
-  background: #f2ede7;
+  background: #eceef2;
 }
 
 .topic-item-titles {
@@ -1026,18 +1081,18 @@ body:has(.about-intro) {
   height: 34px;
   line-height: 32px;
   text-align: center;
-  border: 1px solid #d9c2a3;
+  border: 1px solid var(--accent-light);
   border-radius: 50%;
   font-family: 'EB Garamond', serif;
   font-size: 22px;
-  color: var(--gold);
+  color: var(--accent);
   transition: background 0.2s ease, color 0.2s ease;
 }
 
 .topic-item[open] summary::after {
   content: "\2013";
-  background: var(--gold);
-  border-color: var(--gold);
+  background: var(--accent);
+  border-color: var(--accent);
   color: #fff;
 }
 
@@ -1047,12 +1102,12 @@ body:has(.about-intro) {
   font-weight: 700;
   font-size: 22px;
   line-height: 1.35;
-  color: var(--gold);
+  color: var(--accent);
   transition: color 0.2s ease;
 }
 
 .topic-item summary:hover .topic-item-title {
-  color: var(--gold-dark);
+  color: var(--accent-dark);
 }
 
 .topic-item-subtitle {
@@ -1141,7 +1196,7 @@ body:has(.about-intro) {
 }
 
 .event-title-link:hover {
-  color: var(--gold);
+  color: var(--accent);
 }
 
 .event-meta {
@@ -1201,7 +1256,7 @@ body:has(.about-intro) {
   font-family: 'Playfair Display', 'Frank Ruhl Libre', serif;
   font-weight: 700;
   font-size: 25px;
-  color: var(--gold);
+  color: var(--accent);
   margin: 34px 0 14px;
 }
 
@@ -1215,7 +1270,7 @@ body:has(.about-intro) {
 .event-itinerary li {
   position: relative;
   padding: 10px 0 10px 26px;
-  border-bottom: 1px solid #f0eae2;
+  border-bottom: 1px solid #e6e8ed;
 }
 
 html[dir="rtl"] .event-itinerary li {
@@ -1227,7 +1282,7 @@ html[dir="rtl"] .event-itinerary li {
   position: absolute;
   left: 0;
   top: 10px;
-  color: var(--gold);
+  color: var(--accent);
 }
 
 html[dir="rtl"] .event-itinerary li::before {
@@ -1236,7 +1291,7 @@ html[dir="rtl"] .event-itinerary li::before {
 }
 
 .event-itinerary strong {
-  color: var(--gold-dark);
+  color: var(--accent-dark);
 }
 
 /* RSVP form on the event page */
@@ -1245,7 +1300,7 @@ html[dir="rtl"] .event-itinerary li::before {
   margin-top: 26px;
   padding: 26px 28px;
   background: var(--cream);
-  border: 1px solid #ece5dd;
+  border: 1px solid #e2e5eb;
   border-radius: 6px;
   max-width: 640px;
 }
@@ -1258,7 +1313,7 @@ html[dir="rtl"] .event-itinerary li::before {
   font-family: 'Playfair Display', 'Frank Ruhl Libre', serif;
   font-weight: 700;
   font-size: 21px;
-  color: var(--gold-dark);
+  color: var(--accent-dark);
   margin: 0 0 16px;
 }
 
@@ -1292,13 +1347,13 @@ html[dir="rtl"] .event-itinerary li::before {
 .rsvp-form input:focus,
 .rsvp-form textarea:focus {
   outline: none;
-  border-color: var(--gold);
+  border-color: var(--accent);
 }
 
 .rsvp-form button[type="submit"] {
   border: none;
   border-radius: 3px;
-  background: var(--gold);
+  background: var(--accent);
   color: #fff;
   font-family: 'Anton', sans-serif;
   letter-spacing: 1px;
@@ -1309,7 +1364,7 @@ html[dir="rtl"] .event-itinerary li::before {
 }
 
 .rsvp-form button[type="submit"]:hover {
-  background: var(--gold-dark);
+  background: var(--accent-dark);
 }
 
 .rsvp-form button[type="submit"]:disabled {
@@ -1320,7 +1375,7 @@ html[dir="rtl"] .event-itinerary li::before {
 .rsvp-status {
   margin: 12px 0 0;
   font-size: 14px;
-  color: var(--gold-dark);
+  color: var(--accent-dark);
   min-height: 1.2em;
 }
 
@@ -1362,14 +1417,14 @@ html[dir="rtl"] .event-itinerary li::before {
   font-size: 14px;
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--accent);
   margin-bottom: 26px;
   border-bottom: 1px solid transparent;
   transition: border-color 0.2s ease;
 }
 
 .events-page .back-link:hover {
-  border-color: var(--gold);
+  border-color: var(--accent);
 }
 
 .event-card img {
@@ -1388,7 +1443,7 @@ html[dir="rtl"] .event-itinerary li::before {
   display: inline-block;
   font-family: 'Anton', sans-serif;
   letter-spacing: 1px;
-  color: var(--gold);
+  color: var(--accent);
   font-size: 15px;
   margin-bottom: 10px;
 }
@@ -1437,14 +1492,14 @@ html[dir="rtl"] .event-itinerary li::before {
   font-size: 14px;
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  color: var(--gold);
+  color: var(--accent);
   margin-bottom: 30px;
   border-bottom: 1px solid transparent;
   transition: border-color 0.2s ease;
 }
 
 .topic-page .back-link:hover {
-  border-color: var(--gold);
+  border-color: var(--accent);
 }
 
 .topic-page h1 {
@@ -1461,7 +1516,7 @@ html[dir="rtl"] .event-itinerary li::before {
 
 .cta-button {
   display: inline-block;
-  background: var(--gold);
+  background: var(--accent);
   color: #fff;
   letter-spacing: 1px;
   padding: 16px 30px;
@@ -1470,7 +1525,7 @@ html[dir="rtl"] .event-itinerary li::before {
 }
 
 .cta-button:hover {
-  background: var(--gold-dark);
+  background: var(--accent-dark);
 }
 
 /* ---------- Responsive ---------- */
@@ -1488,20 +1543,37 @@ html[dir="rtl"] .event-itinerary li::before {
   }
   .hero {
     flex-direction: column;
-    gap: 0;
+    justify-content: flex-start;
     min-height: 0;
-    padding: 130px 24px 42px;
+    padding: 64px 24px 0;
+    background-position: 30% bottom;
     text-align: center;
+  }
+  .hero::before {
+    left: 50%;
+    width: 130%;
+    height: 80px;
   }
   .hero-copy {
     max-width: 100%;
-    margin-left: 0;
+    margin: 0 0 30px;
   }
   .hero-copy h1 {
     font-size: 36px;
+    margin-bottom: 14px;
   }
-  .hero-copy p {
+  .hero-kicker {
     font-size: 21px;
+    margin-bottom: 12px;
+  }
+  .hero-sub {
+    font-size: 19px;
+  }
+  .hero-photo {
+    align-self: center;
+    width: min(88%, 400px);
+    height: auto;
+    margin-right: 0;
   }
   .main-nav ul {
     gap: 16px;
@@ -1545,8 +1617,11 @@ html[dir="rtl"] .event-itinerary li::before {
     letter-spacing: 1.4px;
   }
   .hero-copy h1 {
-    font-size: 31px;
+    font-size: min(31px, 8vw);
     text-wrap: balance;
+  }
+  .hero-kicker {
+    font-size: min(21px, 5.3vw);
   }
   .about-teaser {
     padding: 55px 0;
@@ -1663,7 +1738,7 @@ html[dir="rtl"] .event-itinerary li::before {
 .popup-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(10,8,7,0.75);
+  background: rgba(12,14,20,0.75);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1757,13 +1832,13 @@ html[dir="rtl"] .event-itinerary li::before {
 .popup-modal input[type="text"]:focus,
 .popup-modal input[type="email"]:focus {
   outline: none;
-  border-color: var(--gold);
+  border-color: var(--accent);
 }
 
 .popup-modal button[type="submit"] {
   margin-top: 6px;
   padding: 14px 30px;
-  background: var(--gold);
+  background: var(--accent);
   color: #fff;
   border: none;
   border-radius: 3px;
@@ -1774,7 +1849,7 @@ html[dir="rtl"] .event-itinerary li::before {
 }
 
 .popup-modal button[type="submit"]:hover {
-  background: var(--gold-dark);
+  background: var(--accent-dark);
 }
 
 .popup-modal button[type="submit"]:disabled {
@@ -1785,7 +1860,7 @@ html[dir="rtl"] .event-itinerary li::before {
 .popup-status {
   margin: 14px 0 0;
   font-size: 14px;
-  color: var(--gold-dark);
+  color: var(--accent-dark);
   min-height: 1.2em;
 }
 
@@ -1805,7 +1880,7 @@ html[dir="rtl"] .event-itinerary li::before {
 
 .lang-toggle:hover {
   background: #fff;
-  color: var(--gold-dark);
+  color: var(--accent-dark);
 }
 
 /* ---------- Hebrew typography ---------- */
@@ -1877,7 +1952,7 @@ html[dir="rtl"] .a11y-widget {
   height: 52px;
   border-radius: 50%;
   border: none;
-  background: var(--gold);
+  background: var(--accent);
   color: #fff;
   cursor: pointer;
   display: flex;
@@ -1888,7 +1963,7 @@ html[dir="rtl"] .a11y-widget {
 }
 
 .a11y-button:hover {
-  background: var(--gold-dark);
+  background: var(--accent-dark);
   transform: scale(1.06);
 }
 
@@ -1901,7 +1976,7 @@ html[dir="rtl"] .a11y-widget {
   display: none;
   background: #fff;
   color: var(--dark);
-  border: 1px solid #e5ddd3;
+  border: 1px solid #dcdfe6;
   border-radius: 8px;
   box-shadow: 0 18px 48px rgba(0,0,0,0.22);
   padding: 18px 20px;
@@ -1916,7 +1991,7 @@ html[dir="rtl"] .a11y-widget {
   font-family: 'Playfair Display', 'Frank Ruhl Libre', serif;
   font-weight: 700;
   font-size: 18px;
-  color: var(--gold-dark);
+  color: var(--accent-dark);
   margin: 0 0 12px;
 }
 
@@ -1932,7 +2007,7 @@ html[dir="rtl"] .a11y-widget {
 .a11y-panel input[type="checkbox"] {
   width: 17px;
   height: 17px;
-  accent-color: var(--gold);
+  accent-color: var(--accent);
   cursor: pointer;
 }
 
@@ -1948,8 +2023,8 @@ html[dir="rtl"] .a11y-widget {
 }
 
 .a11y-reset:hover {
-  border-color: var(--gold);
-  color: var(--gold-dark);
+  border-color: var(--accent);
+  color: var(--accent-dark);
 }
 
 /* ---------- Accessibility modes ---------- */
@@ -1970,23 +2045,24 @@ html.acc-contrast .popup-modal > p {
 html.acc-contrast .gold-heading,
 html.acc-contrast .topic-item-title,
 html.acc-contrast .topic-signup-note,
-html.acc-contrast .event-date,
-html.acc-contrast .newsletter-title {
-  color: #5a4227;
+html.acc-contrast .event-date {
+  color: #232836;
 }
 
+html.acc-contrast .newsletter-title,
+html.acc-contrast .about-intro .gold-heading,
 html.acc-contrast .newsletter p.lead,
 html.acc-contrast .newsletter-status,
 html.acc-contrast .topics-banner p,
 html.acc-contrast .video-link {
-  color: #f5e9d5;
+  color: #eef1f7;
 }
 
 html.acc-contrast .newsletter button,
 html.acc-contrast .topic-signup button,
 html.acc-contrast .cta-button,
 html.acc-contrast .popup-modal button[type="submit"] {
-  background: #5a4227;
+  background: #232836;
 }
 
 html.acc-dyslexia body,
