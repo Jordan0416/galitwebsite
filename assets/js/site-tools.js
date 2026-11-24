@@ -228,10 +228,9 @@
     { s: '.main-nav a[href="contact.html"]', he: 'צור קשר' },
     { s: '.site-footer', he: '© 2026 ד״ר גלית בן טובאל. כל הזכויות שמורות.' },
     // Home
-    { s: '.hero-kicker', he: 'הצטרפו אליי למסע לגילוי מחדש של' },
-    { s: '.hero-copy h1', he: 'החוכמה העתיקה<br>של האנושות', html: true },
-    { s: '.hero-sub', he: 'יחד נחקור מה הידע הזה יכול ללמד אותנו על החיים היום.' },
-    { s: '.discover-heading', he: 'גלו כיצד תבונה עתיקה יכולה להנחות את חייכם המודרניים.' },
+    { s: '.hero-copy h1', he: 'לעבר יש עוד מה לספר לנו.' },
+    { s: '.hero-sub', he: 'יחד נחקור מה חוכמה עתיקה ומחזורים קוסמיים יכולים ללמד אותנו על החיים היום.' },
+    { s: '.discover-heading', he: 'גלו את הסיפורים והרעיונות שאני חולקת בספריי, בהרצאותיי ובאירועים שלי.' },
     { s: '.card[href="shop.html"] h3', he: 'ספרים' },
     { s: '.card[href="shop.html"] p', he: 'בקרוב' },
     { s: '.card[href="topics.html"] h3', he: 'הרצאות' },
@@ -245,7 +244,7 @@
     { s: '#newsletterForm input[name="email"]', he: 'האימייל שלכם', attr: 'placeholder' },
     { s: '#newsletterForm button', he: 'הרשמה' },
     { s: '.popup-modal h3', he: 'הצטרפו לשיחה' },
-    { s: '.popup-modal > p', he: 'הירשמו לעדכונים בלעדיים ולחוכמה בחינם, ישירות לתיבת הדואר שלכם.' },
+    { s: '.popup-modal > p', he: 'רוצים לחקור חוכמה עתיקה, מחזורים קוסמיים וכיצד הם יכולים להעשיר את חייכם המודרניים?' },
     { s: '#popupForm label:nth-of-type(1)', he: 'שם: ', firstText: true },
     { s: '#popupForm label:nth-of-type(2)', he: 'אימייל: ', firstText: true },
     { s: '#popupForm button', he: 'הצטרפו לשיחה' },
@@ -285,6 +284,14 @@
 
     T.forEach(function (entry) {
       document.querySelectorAll(entry.s).forEach(function (el) {
+        // Text placed by platform-copy.js (from the sheet) wins over the
+        // built-in strings here.
+        if (el.__sheet) {
+          el.textContent = lang === 'he'
+            ? fixFor(el.__sheet.en, el.__sheet.he || entry.he || el.__sheet.en)
+            : el.__sheet.en;
+          return;
+        }
         if (entry.attr) {
           if (el.__en === undefined) el.__en = el.getAttribute(entry.attr) || '';
           el.setAttribute(entry.attr, lang === 'he' ? fixFor(el.__en, entry.he) : el.__en);
@@ -398,7 +405,7 @@
         var next = lang === 'he' ? 'en' : 'he';
         // Pages with sheet-driven content reload so it re-renders
         // (and machine-translates) in the new language.
-        if (document.querySelector('.topics-accordion, .topics-list, #eventsList, #eventDetail, #aboutText')) {
+        if (document.querySelector('.topics-accordion, .topics-list, #eventsList, #eventDetail, #aboutText, #aboutPhoto')) {
           localStorage.setItem(LANG_KEY, next);
           location.reload();
         } else {
