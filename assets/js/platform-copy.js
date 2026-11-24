@@ -115,7 +115,7 @@
     setText('.hero-copy h1', pair.en.main, pair.shown.main);
     setText('.hero-sub', pair.en.sub, pair.shown.sub);
     setText('.discover-heading', pair.en.cta, pair.shown.cta);
-    setText('.popup-modal > p', pair.en.popup, pair.shown.popup);
+    setText('.popup-modal > p:not(.popup-status)', pair.en.popup, pair.shown.popup);
   }
 
   // English: show the last copy we saw straight away, so an edited

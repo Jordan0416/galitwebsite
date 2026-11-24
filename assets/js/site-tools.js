@@ -244,7 +244,7 @@
     { s: '#newsletterForm input[name="email"]', he: 'האימייל שלכם', attr: 'placeholder' },
     { s: '#newsletterForm button', he: 'הרשמה' },
     { s: '.popup-modal h3', he: 'הצטרפו לשיחה' },
-    { s: '.popup-modal > p', he: 'רוצים לחקור חוכמה עתיקה, מחזורים קוסמיים וכיצד הם יכולים להעשיר את חייכם המודרניים?' },
+    { s: '.popup-modal > p:not(.popup-status)', he: 'רוצים לחקור חוכמה עתיקה, מחזורים קוסמיים וכיצד הם יכולים להעשיר את חייכם המודרניים?' },
     { s: '#popupForm label:nth-of-type(1)', he: 'שם: ', firstText: true },
     { s: '#popupForm label:nth-of-type(2)', he: 'אימייל: ', firstText: true },
     { s: '#popupForm button', he: 'הצטרפו לשיחה' },
