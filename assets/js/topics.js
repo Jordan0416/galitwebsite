@@ -172,14 +172,15 @@
 
       var bodyWrap = document.createElement('div');
       bodyWrap.className = 'topic-item-body';
-      var norm = function (s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, ''); };
+      // Hebrew letters count too, or every Hebrew paragraph would compare as empty
+      var norm = function (s) { return s.toLowerCase().replace(/[^a-z0-9\u0590-\u05FF]+/g, ''); };
       var titleSet = titleLines.map(norm);
       if (subtitleText) titleSet.push(norm(subtitleText));
       var paras = body.split('\n')
         .map(function (s) { return s.trim(); })
         .filter(Boolean);
       // The sheet's description often opens by repeating the title lines — drop those
-      while (paras.length && titleSet.indexOf(norm(paras[0])) !== -1) paras.shift();
+      while (paras.length && norm(paras[0]) && titleSet.indexOf(norm(paras[0])) !== -1) paras.shift();
       paras.forEach(function (para) {
         var p = document.createElement('p');
         p.textContent = para;

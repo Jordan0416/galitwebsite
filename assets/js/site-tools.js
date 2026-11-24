@@ -56,6 +56,127 @@
     }
   };
 
+  // ---------------- Hebrew corrections from the sheet ----------------
+  // The "Website Hebrew" tab of the Google Sheet lists English text
+  // (column A) next to the Hebrew that should be shown for it (column B).
+  // A row there wins over both the built-in Hebrew below and the machine
+  // translation of sheet content. Matching ignores case, spacing and
+  // quote/dash style. The last good copy is kept in localStorage so the
+  // corrected text shows immediately on the next visit.
+  var HE_SHEET_ID = '1mFQzN_YO7R8no0IDtPvohxOKMBSjvaX2_TLQVXtcOpY';
+  var HE_SHEET_TAB = 'Website Hebrew';
+  var HE_CACHE_KEY = 'siteHeFixes';
+  var heFixes = {};
+  try { heFixes = JSON.parse(localStorage.getItem(HE_CACHE_KEY)) || {}; } catch (e) { heFixes = {}; }
+
+  function normKey(s) {
+    return String(s == null ? '' : s)
+      .replace(/[‘’‚′]/g, "'")
+      .replace(/[“”„″]/g, '"')
+      .replace(/[‐-―−]/g, '-')
+      .replace(/[ ‎‏‪-‮]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .toLowerCase();
+  }
+
+  // Corrected Hebrew for an English string, or the given fallback.
+  function fixFor(en, fallback) {
+    var k = normKey(en);
+    return (k && Object.prototype.hasOwnProperty.call(heFixes, k)) ? heFixes[k] : fallback;
+  }
+
+  function parseFixCSV(text) {
+    var rows = [], row = [], field = '', inQuotes = false;
+    for (var i = 0; i < text.length; i++) {
+      var c = text[i];
+      if (inQuotes) {
+        if (c === '"') {
+          if (text[i + 1] === '"') { field += '"'; i++; }
+          else inQuotes = false;
+        } else field += c;
+      } else if (c === '"') inQuotes = true;
+      else if (c === ',') { row.push(field); field = ''; }
+      else if (c === '\n' || c === '\r') {
+        if (c === '\r' && text[i + 1] === '\n') i++;
+        row.push(field); field = '';
+        rows.push(row); row = [];
+      } else field += c;
+    }
+    if (field !== '' || row.length) { row.push(field); rows.push(row); }
+    return rows;
+  }
+
+  function applyFixesToDynamic() {
+    Object.keys(dynamic.en).forEach(function (k) {
+      dynamic.he[k] = fixFor(dynamic.en[k], builtInHe[k]);
+    });
+  }
+
+  var fixesPromise = null;
+  function loadFixes() {
+    if (fixesPromise) return fixesPromise;
+    var url = 'https://docs.google.com/spreadsheets/d/' + HE_SHEET_ID +
+      '/gviz/tq?tqx=out:csv&headers=1&sheet=' + encodeURIComponent(HE_SHEET_TAB);
+    var timeout = new Promise(function (resolve) { setTimeout(resolve, 4000); });
+    var load = fetch(url)
+      .then(function (res) {
+        if (!res.ok) throw new Error('fixes fetch failed: ' + res.status);
+        return res.text();
+      })
+      .then(function (text) {
+        var rows = parseFixCSV(text);
+        // Google returns the FIRST tab when the requested one is missing,
+        // so require this tab's own header row.
+        var head = rows[0] || [];
+        if (normKey(head[0]).indexOf('english') !== 0 || normKey(head[1]).indexOf('hebrew') !== 0) {
+          throw new Error('Website Hebrew tab not found');
+        }
+        var next = {};
+        rows.slice(1).forEach(function (cols) {
+          var en = (cols[0] || '').trim();
+          var he = (cols[1] || '').trim();
+          if (!en || !he) return;
+          next[normKey(en)] = he;
+          // A multi-line cell also corrects each of its lines on their own
+          var enLines = en.split('\n'), heLines = he.split('\n');
+          if (enLines.length > 1 && enLines.length === heLines.length) {
+            enLines.forEach(function (line, i) {
+              var k = normKey(line);
+              if (k && heLines[i].trim() && !next[k]) next[k] = heLines[i].trim();
+            });
+          }
+        });
+        var before = JSON.stringify(heFixes);
+        var after = JSON.stringify(next);
+        heFixes = next;
+        try { localStorage.setItem(HE_CACHE_KEY, after); } catch (e) {}
+        applyFixesToDynamic();
+        // Static text was already swapped using the cached copy — redo it
+        // only if the sheet has changed since.
+        if (before !== after && lang === 'he' && document.querySelector('.lang-toggle')) applyLang('he');
+      })
+      .catch(function (err) {
+        console.warn('Hebrew corrections unavailable, using built-in text.', err);
+      });
+    fixesPromise = Promise.race([load, timeout]);
+    return fixesPromise;
+  }
+
+  function stripTags(html) {
+    var d = document.createElement('div');
+    d.innerHTML = String(html).replace(/<br\s*\/?>/gi, ' ');
+    return d.textContent;
+  }
+
+  function escapeHtml(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  var builtInHe = {};
+  Object.keys(dynamic.he).forEach(function (k) { builtInHe[k] = dynamic.he[k]; });
+  applyFixesToDynamic();
+
   function buildI18n(l) {
     return {
       lang: l,
@@ -64,21 +185,36 @@
       // English (or any failure) resolves to the originals untouched.
       translate: function (texts) {
         if (l !== 'he' || !texts.length) return Promise.resolve(texts);
-        return fetch('/api/translate', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ q: texts, target: 'he' })
-        })
-          .then(function (r) { if (!r.ok) throw new Error('translate ' + r.status); return r.json(); })
-          .then(function (d) {
-            return (d.translations && d.translations.length === texts.length) ? d.translations : texts;
+        return loadFixes().then(function () {
+          var out = texts.slice();
+          var need = [];
+          var needIdx = [];
+          texts.forEach(function (text, i) {
+            var fixed = fixFor(text, null);
+            if (fixed !== null) out[i] = fixed;
+            else if (String(text).trim()) { need.push(text); needIdx.push(i); }
+          });
+          if (!need.length) return out;
+          return fetch('/api/translate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ q: need, target: 'he' })
           })
-          .catch(function () { return texts; });
+            .then(function (r) { if (!r.ok) throw new Error('translate ' + r.status); return r.json(); })
+            .then(function (d) {
+              if (d.translations && d.translations.length === need.length) {
+                d.translations.forEach(function (tr, j) { out[needIdx[j]] = tr; });
+              }
+              return out;
+            })
+            .catch(function () { return out; });
+        });
       }
     };
   }
 
   window.SITE_I18N = buildI18n(lang);
+  if (lang === 'he') loadFixes();
 
   // Static text translations: selector → Hebrew. English originals are
   // captured from the page itself before the first swap.
@@ -145,30 +281,42 @@
     document.documentElement.lang = lang;
     document.documentElement.dir = lang === 'he' ? 'rtl' : 'ltr';
 
+    if (lang === 'he') loadFixes();
+
     T.forEach(function (entry) {
       document.querySelectorAll(entry.s).forEach(function (el) {
         if (entry.attr) {
           if (el.__en === undefined) el.__en = el.getAttribute(entry.attr) || '';
-          el.setAttribute(entry.attr, lang === 'he' ? entry.he : el.__en);
+          el.setAttribute(entry.attr, lang === 'he' ? fixFor(el.__en, entry.he) : el.__en);
         } else if (entry.firstText) {
           var node = el.firstChild;
           if (!node || node.nodeType !== 3) return;
           if (el.__en === undefined) el.__en = node.nodeValue;
-          node.nodeValue = lang === 'he' ? entry.he : el.__en;
+          var fixedLabel = fixFor(el.__en, null);
+          node.nodeValue = lang === 'he' ? (fixedLabel !== null ? fixedLabel + ' ' : entry.he) : el.__en;
         } else if (entry.map) {
           var key = el.textContent.trim().replace(/\s+/g, ' ');
-          if (el.__en === undefined) el.__en = el.textContent;
+          if (el.__en === undefined) { el.__en = el.textContent; el.__enKey = key; }
           if (lang === 'he') {
-            if (entry.map[key]) el.textContent = entry.map[key];
+            var mapped = fixFor(el.__enKey, entry.map[el.__enKey]);
+            if (mapped) el.textContent = mapped;
           } else {
             el.textContent = el.__en;
           }
         } else if (entry.html) {
           if (el.__en === undefined) el.__en = el.innerHTML;
-          el.innerHTML = lang === 'he' ? entry.he : el.__en;
+          if (lang === 'he') {
+            // Keep the built-in line break unless the sheet text differs
+            var fixedHtml = fixFor(stripTags(el.__en), null);
+            el.innerHTML = (fixedHtml === null || normKey(fixedHtml) === normKey(stripTags(entry.he)))
+              ? entry.he
+              : escapeHtml(fixedHtml).replace(/\n/g, '<br>');
+          } else {
+            el.innerHTML = el.__en;
+          }
         } else {
           if (el.__en === undefined) el.__en = el.textContent;
-          el.textContent = lang === 'he' ? entry.he : el.__en;
+          el.textContent = lang === 'he' ? fixFor(el.__en, entry.he) : el.__en;
         }
       });
     });
@@ -206,7 +354,7 @@
     panelEl.innerHTML = '';
     var title = document.createElement('p');
     title.className = 'a11y-title';
-    title.textContent = lang === 'he' ? 'נגישות' : 'Accessibility';
+    title.textContent = lang === 'he' ? fixFor('Accessibility', 'נגישות') : 'Accessibility';
     panelEl.appendChild(title);
 
     ACC_OPTIONS.forEach(function (o) {
@@ -221,14 +369,14 @@
         applyAcc();
       });
       label.appendChild(cb);
-      label.appendChild(document.createTextNode(' ' + (lang === 'he' ? o.he : o.en)));
+      label.appendChild(document.createTextNode(' ' + (lang === 'he' ? fixFor(o.en, o.he) : o.en)));
       panelEl.appendChild(label);
     });
 
     var reset = document.createElement('button');
     reset.type = 'button';
     reset.className = 'a11y-reset';
-    reset.textContent = lang === 'he' ? 'איפוס' : 'Reset';
+    reset.textContent = lang === 'he' ? fixFor('Reset', 'איפוס') : 'Reset';
     reset.addEventListener('click', function () {
       localStorage.removeItem(ACC_KEY);
       applyAcc();
